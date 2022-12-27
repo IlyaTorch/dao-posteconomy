@@ -2,7 +2,7 @@ import Identicon from 'react-identicons'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { truncate, useGlobalState, daysRemaining } from '../store'
-import { payoutBeneficiary } from '../Dominion'
+import { payoutBeneficiary } from '../Posteconomy'
 import { toast } from 'react-toastify'
 
 const Proposals = () => {

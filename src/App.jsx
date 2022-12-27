@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { loadWeb3 } from './Dominion'
+import { loadWeb3 } from './Posteconomy'
 import { ToastContainer } from 'react-toastify'
-import { isUserLoggedIn } from './CometChat'
+// import { isUserLoggedIn } from './CometChat'
 import Home from './views/Home'
 import Proposal from './views/Proposal'
-import Chat from './views/Chat'
+// import Chat from './views/Chat'
 import 'react-toastify/dist/ReactToastify.min.css'
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
     loadWeb3().then((res) => {
       if (res) setLoaded(true)
     })
-    isUserLoggedIn()
+    // isUserLoggedIn()
   }, [])
 
   return (
@@ -23,7 +23,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="proposal/:id" element={<Proposal />} />
-          <Route path="chat/:gid" element={<Chat />} />
+          {/* <Route path="chat/:gid" element={<Chat />} /> */}
         </Routes>
       ) : null}
 

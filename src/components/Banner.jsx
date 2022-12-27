@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { setGlobalState, useGlobalState } from '../store'
-import { performContribute } from '../Dominion'
+import { performContribute } from '../Posteconomy'
 import { toast } from 'react-toastify'
 
 const Banner = () => {
@@ -46,14 +46,14 @@ const Banner = () => {
         Your contributions:{' '}
         <span>
           <strong>{mybalance} Eth</strong>
-          {isStakeholder ? ', and you are now a stakeholder 😊' : null}
+          {isStakeholder ? ', and you your role is stakeholder' : null}
         </span>
       </p>
       <hr className="my-6 border-gray-300 dark:border-gray-500" />
       <p>
         {isStakeholder
-          ? 'You can now raise proposals on this platform 😆'
-          : 'Hey, when you contribute upto 1 ether you become a stakeholder 😎'}
+          ? 'Raise Your Proposal'
+          : 'To become a stakeholder you need to contribute upto 1 ether'}
       </p>
       <div className="flex flex-row justify-start items-center md:w-1/3 w-full mt-4">
         <input
@@ -109,7 +109,7 @@ const Banner = () => {
             Propose
           </button>
         ) : null}
-        {currentUser &&
+        {/* {currentUser &&
         currentUser.uid == connectedAccount.toLowerCase() ? null : (
           <button
             type="button"
@@ -126,7 +126,7 @@ const Banner = () => {
           >
             Login Chat
           </button>
-        )}
+        )} */}
       </div>
     </div>
   )

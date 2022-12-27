@@ -1,5 +1,5 @@
-const DominionDAO = artifacts.require('DominionDAO')
+const PosteconomyDAO = artifacts.require('PosteconomyDAO')
 
 module.exports = async function (deployer) {
-  await deployer.deploy(DominionDAO)
+  await deployer.deploy(PosteconomyDAO)
 }

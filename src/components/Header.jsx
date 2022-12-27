@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { FaUserSecret } from 'react-icons/fa'
+import { FaRegMoneyBillAlt } from 'react-icons/fa'
 import { MdLightMode } from 'react-icons/md'
 import { FaMoon } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import { connectWallet } from '../Dominion'
-import { useGlobalState, truncate } from '../store'
+import { connectWallet } from '../Posteconomy'
+import { useGlobalState } from '../store'
 
 const Header = () => {
   const [theme, setTheme] = useState(localStorage.theme)
@@ -36,9 +36,9 @@ const Header = () => {
               to={'/'}
               className="flex flex-row justify-start items-center space-x-3"
             >
-              <FaUserSecret className="cursor-pointer" size={25} />
+              <FaRegMoneyBillAlt className="cursor-pointer" size={25} />
               <span className="invisible md:visible dark:text-gray-300">
-                Dominion
+                PostEconomy
               </span>
             </Link>
 
@@ -67,7 +67,7 @@ const Header = () => {
                   transition duration-150 ease-in-out dark:text-blue-500
                   dark:border dark:border-blue-500 dark:bg-transparent"
                 >
-                  {truncate(connectedAccount, 4, 4, 11)}
+                  {connectedAccount}
                 </button>
               ) : (
                 <button

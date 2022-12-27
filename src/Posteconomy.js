@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import { setGlobalState, getGlobalState } from './store'
-import DominionDAO from './abis/DominionDAO.json'
+import PosteconomyDAO from './abis/PosteconomyDAO.json'
 
 const { ethereum } = window
 
@@ -20,9 +20,13 @@ const raiseProposal = async ({ title, description, beneficiary, amount }) => {
     const contract = getGlobalState('contract')
     const account = getGlobalState('connectedAccount')
 
+    console.log(contract)
+
     let proposal = await contract.methods
       .createProposal(title, description, beneficiary, amount)
       .send({ from: account })
+
+    console.log(proposal)
 
     return proposal
   } catch (error) {
@@ -150,11 +154,11 @@ const loadWeb3 = async () => {
     setGlobalState('connectedAccount', accounts[0])
 
     const networkId = await web3.eth.net.getId()
-    const networkData = DominionDAO.networks[networkId]
+    const networkData = PosteconomyDAO.networks[networkId]
 
     if (networkData) {
       const contract = new web3.eth.Contract(
-        DominionDAO.abi,
+        PosteconomyDAO.abi,
         networkData.address
       )
       const isStakeholder = await contract.methods
@@ -172,7 +176,7 @@ const loadWeb3 = async () => {
       setGlobalState('isStakeholder', isStakeholder)
       setGlobalState('proposals', structuredProposals(proposals))
     } else {
-      window.alert('DominionDAO contract not deployed to detected network.')
+      window.alert('PosteconomyDAO contract not deployed to detected network.')
     }
     return true
   } catch (error) {

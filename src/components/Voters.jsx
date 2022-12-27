@@ -3,7 +3,7 @@ import moment from 'moment'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { truncate } from '../store'
-import { listVoters } from '../Dominion'
+import { listVoters } from '../Posteconomy'
 
 const Voters = () => {
   const [voters, setVoters] = useState([])

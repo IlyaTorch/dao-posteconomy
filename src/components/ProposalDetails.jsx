@@ -12,7 +12,7 @@ import {
   Legend,
   Tooltip,
 } from 'recharts'
-import { getProposal, voteOnProposal } from '../Dominion'
+import { getProposal, voteOnProposal, listVoters } from '../Posteconomy'
 import { useGlobalState } from '../store'
 
 const ProposalDetails = () => {
@@ -24,6 +24,7 @@ const ProposalDetails = () => {
   const [isStakeholder] = useGlobalState('isStakeholder')
   const [connectedAccount] = useGlobalState('connectedAccount')
   const [currentUser] = useGlobalState('currentUser')
+  const [voted, setVoted] = useState(null)
 
   useEffect(() => {
     retrieveProposal()
@@ -31,6 +32,7 @@ const ProposalDetails = () => {
       if (!!!group.code) setGroup(group)
       console.log(group)
     })
+    listVoters(id).then(res => res.map(x => x[0]).includes(connectedAccount)).then(res => setVoted(res))
   }, [id])
 
   const retrieveProposal = () => {
@@ -44,7 +46,7 @@ const ProposalDetails = () => {
         },
       ])
     })
-  }
+  }  
 
   const onVote = (choice) => {
     if (new Date().getTime() > Number(proposal.duration + '000')) {
@@ -121,7 +123,7 @@ const ProposalDetails = () => {
         className="flex flex-row justify-start items-center space-x-3 mt-4"
         role="group"
       >
-        {isStakeholder ? (
+        {isStakeholder && !voted ? (
           <>
             <button
               type="button"
@@ -198,7 +200,7 @@ const ProposalDetails = () => {
           </button>
         ) : null}
 
-        {proposal?.proposer.toLowerCase() != connectedAccount.toLowerCase() &&
+        {/* {proposal?.proposer.toLowerCase() != connectedAccount.toLowerCase() &&
         !!!group ? (
           <button
             type="button"
@@ -216,7 +218,7 @@ const ProposalDetails = () => {
           >
             Group N/A
           </button>
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   )
