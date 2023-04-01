@@ -7,20 +7,21 @@ import { toast } from 'react-toastify'
 const CreateProposal = () => {
   const [createModal] = useGlobalState('createModal')
   const [title, setTitle] = useState('')
+  const [initiator, setInitiator] = useState('')
   const [amount, setAmount] = useState('')
   const [beneficiary, setBeneficiary] = useState('')
   const [description, setDescription] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!title || !description || !beneficiary || !amount) return
-    const proposal = { title, description, beneficiary, amount }
+    if (!title || !description || !beneficiary || !amount || !initiator) return
+    const proposal = { title, description, beneficiary, amount, initiator }
 
     raiseProposal(proposal).then((proposed) => {
       if (proposed) {
         toast.success('Proposal created, reloading in progress...')
         closeModal()
-        window.location.reload()
+        // window.location.reload()
       }
     })
   }
@@ -33,6 +34,7 @@ const CreateProposal = () => {
   const resetForm = () => {
     setTitle('')
     setAmount('')
+    setInitiator('')
     setBeneficiary('')
     setDescription('')
   }
@@ -76,8 +78,22 @@ const CreateProposal = () => {
               bg-transparent border-0
               focus:outline-none focus:ring-0"
               type="text"
+              name="initiator"
+              placeholder="Initiator's address"
+              onChange={(e) => setInitiator(e.target.value)}
+              value={initiator}
+              required
+            />
+          </div>
+
+          <div className="flex flex-row justify-between items-center border border-gray-500 dark:border-gray-500 rounded-xl mt-5">
+            <input
+              className="block w-full text-sm
+              bg-transparent border-0
+              focus:outline-none focus:ring-0"
+              type="text"
               name="amount"
-              placeholder="e.g 2.5 Eth"
+              placeholder="Amount required to complete the initiative, e.g 2.5 Eth"
               onChange={(e) => setAmount(e.target.value)}
               value={amount}
               required
@@ -105,7 +121,7 @@ const CreateProposal = () => {
               focus:outline-none focus:ring-0 h-20"
               type="text"
               name="description"
-              placeholder="Description"
+              placeholder="Initiative description"
               onChange={(e) => setDescription(e.target.value)}
               value={description}
               required

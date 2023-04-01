@@ -14,13 +14,11 @@ const connectWallet = async () => {
   }
 }
 
-const raiseProposal = async ({ title, description, beneficiary, amount }) => {
+const raiseProposal = async ({ title, description, beneficiary, amount, initiator }) => {
   try {
     amount = window.web3.utils.toWei(amount.toString(), 'ether')
     const contract = getGlobalState('contract')
     const account = getGlobalState('connectedAccount')
-
-    console.log(contract)
 
     let proposal = await contract.methods
       .createProposal(title, description, beneficiary, amount)
@@ -180,7 +178,7 @@ const loadWeb3 = async () => {
     }
     return true
   } catch (error) {
-    alert('Please connect your metamask wallet!')
+    alert('Please connect your metamask wallet V1!')
     console.log(error)
     return false
   }

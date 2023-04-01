@@ -3,7 +3,7 @@ import { FaRegMoneyBillAlt } from 'react-icons/fa'
 import { MdLightMode } from 'react-icons/md'
 import { FaMoon } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import { connectWallet } from '../Posteconomy'
+import { connectWallet } from '../PosteconomyV2'
 import { useGlobalState } from '../store'
 
 const Header = () => {

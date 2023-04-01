@@ -1,2 +1,3 @@
 truffle migrate
+
 yarn start

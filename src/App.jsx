@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { loadWeb3 } from './Posteconomy'
+import { loadWeb3 } from './PosteconomyV2'
 import { ToastContainer } from 'react-toastify'
 // import { isUserLoggedIn } from './CometChat'
 import Home from './views/Home'
 import Proposal from './views/Proposal'
 // import Chat from './views/Chat'
 import 'react-toastify/dist/ReactToastify.min.css'
+import DAO from "./views/DAO";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false)
@@ -21,8 +22,9 @@ const App = () => {
     <div className="min-h-screen bg-white text-gray-900 dark:bg-[#212936] dark:text-gray-300">
       {loaded ? (
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="proposal/:id" element={<Proposal />} />
+          <Route path="/" element={<Home/>} />
+          <Route path="proposal/:id" element={<Proposal/>} />
+          <Route path="dao/:id" element={<DAO/>} />
           {/* <Route path="chat/:gid" element={<Chat />} /> */}
         </Routes>
       ) : null}

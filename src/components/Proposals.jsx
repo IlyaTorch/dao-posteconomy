@@ -95,7 +95,7 @@ const Proposals = () => {
                     scope="col"
                     className="text-sm font-medium px-6 py-4 text-left"
                   >
-                    Expires
+                    Expiration
                   </th>
                   <th
                     scope="col"

@@ -1,0 +1,25 @@
+.dao-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 900px;
+    margin: auto;
+}
+
+.dao-page-short-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 350px;
+    margin: auto;
+}
+.li-member {
+    font-size: 10px;
+}
+.dao-page-initiatives-header {
+    font-size: 26px;
+    font-weight: bold;
+}

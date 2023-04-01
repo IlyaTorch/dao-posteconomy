@@ -1,0 +1,47 @@
+.dao-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    text-align: center;
+}
+
+.dao-item img {
+    border-radius: 50%;
+    border: 0.5px solid #000;
+}
+
+.dao-item .button-join {
+    width: 150px;
+    background-color: #008CBA; /* Blue */
+    border: none;
+    border-radius: 15%;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.dao-item .button-member {
+    width: 150px;
+    background-color: #4CAF50; /* Green */
+    border: none;
+    border-radius: 15%;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.dao-item .name {
+    font-size: 22px;
+    font-weight: bold;
+}
