@@ -1,32 +1,37 @@
-import React, {useState} from "react";
-import {isMember, joinDAO} from "../PosteconomyV2";
+import React, {useEffect, useState} from "react";
+import {getDAO, isMember, joinDAO} from "../PosteconomyV2";
 import {useGlobalState} from "../store";
 import "../styles/DAOitem.css";
 
-const DAOitem = ({id, name}) => {
+const DAOitem = ({id, addr}) => {
     const [acc] = useGlobalState('connectedAccount');
     const [daoMember, setDaoMember] = useState(false)
-    isMember(id, acc).then(res => setDaoMember(res));
+    const [daoName, setDaoName] = useState('')
+
+    useEffect(() => {
+        isMember(addr, acc).then(res => setDaoMember(res));
+        getDAO(addr).then(res => setDaoName(res[0]));
+    }, [addr]);
 
     const onJoinDAO = () => {
-        joinDAO(id, acc).then(r => console.log(r))
+        joinDAO(addr, acc).then(r => console.log(r))
     }
 
     const redirectToDAOpage = () => {
-        window.location.replace(`/dao/${id}`);
+        window.location.replace(`/dao/${addr}`);
     }
 
     return (
-        <div className="dao-item" id={id}>
+        <div className="dao-item" id={addr}>
             <img
                 src={`https://robohash.org/${id}?set=set2&size=180x180`}
-                alt={name}
+                alt={addr}
                 onClick={redirectToDAOpage}
             />
             <br/>
             <span className="name">
-            {name}
-        </span>
+                {daoName}
+            </span>
             <br/>
             {daoMember ?
                 <button className='button-member'>Member</button> :

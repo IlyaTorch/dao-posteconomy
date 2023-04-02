@@ -8,7 +8,12 @@ const DAOlist = () => {
 
     return (
         <div className='dao-list'>
-            {daos.map((dao, id) => <DAOitem key={id} id={id} name={dao}/>)}
+            {daos.map((dao, id) => <DAOitem
+                key={id}
+                id={id}
+                addr={dao}
+            />
+            )}
         </div>
     )
 };

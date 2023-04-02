@@ -24,7 +24,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="proposal/:id" element={<Proposal/>} />
-          <Route path="dao/:id" element={<DAO/>} />
+          <Route path="dao/:addr" element={<DAO/>} />
           {/* <Route path="chat/:gid" element={<Chat />} /> */}
         </Routes>
       ) : null}

@@ -2,7 +2,6 @@ import {useState} from 'react'
 import {setGlobalState, useGlobalState} from '../store'
 import {performContribute} from '../Posteconomy'
 import {toast} from 'react-toastify'
-import {createDAO, getAllDAOs, getDAOsCount} from "../PosteconomyV2";
 
 const Banner = () => {
     const [isStakeholder] = useGlobalState('isStakeholder')
@@ -32,22 +31,12 @@ const Banner = () => {
         })
     }
 
-
-    const onGetDAOsCount = () => {
-        getDAOsCount().then(r => console.log(r))
-    }
-
     const opened = () =>
         proposals.filter(
             (proposal) => new Date().getTime() < Number(proposal.duration + '000')
         ).length
 
-    return (
-        <div className="p-8">
-            <br/>
-            <br/>
-            <button onClick={onGetDAOsCount}>Get Count</button>
-        </div>
+    return (<h1>Test</h1>
         // <div className="p-8">
         //   <h2 className="font-semibold text-3xl mb-5">
         //     {opened()} Proposal{opened() == 1 ? '' : 's'} Currenly Opened

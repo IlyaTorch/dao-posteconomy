@@ -1,5 +1,6 @@
-const PosteconomyDAO = artifacts.require('PosteconomyDAO')
+const ManagerDAOs = artifacts.require('ManagerDAOs');
+
 
 module.exports = async function (deployer) {
-  await deployer.deploy(PosteconomyDAO)
+  await deployer.deploy(ManagerDAOs);
 }

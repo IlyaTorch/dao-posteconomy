@@ -1,20 +1,24 @@
 import {getDAO} from "../PosteconomyV2";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import DAOitem from "../components/DAOitem";
 import "../styles/DAOdetails.css";
 
-const DAOdetails = ({daoId}) => {
+const DAOdetails = ({daoId, daoAddr}) => {
     const [name, setName] = useState('')
     const [members, setMembers] = useState([])
-    getDAO(daoId).then(res => {
-        setName(res[1]);
-        setMembers(res[0]);
-    });
+
+    useEffect(() => {
+        getDAO(daoAddr).then(res => {
+            setName(res[0]);
+            setMembers(res[2]);
+        });
+    }, [daoAddr]);
 
     return (
         <div className="dao-page">
             <div className="dao-page-short-info">
-                <DAOitem id={daoId} name={name}/>
+                <DAOitem id={daoId} addr={daoAddr} name={name}/>
+                <span className="dao-page-members-header">Our Members:</span>
                 <ul>
                     {members.map((member, i) => <li key={i} className="li-member">{member}</li>)}
                 </ul>

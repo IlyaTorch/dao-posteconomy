@@ -12,6 +12,7 @@ const DAOcreate = () => {
 
     return (
         <div className="dao-create">
+            <br/>
             <span className="dao-create-header">Create Your Own DAO</span>
             <input
                 type="text"
@@ -26,6 +27,7 @@ const DAOcreate = () => {
             >
                 Create DAO
             </button>
+            <br/>
         </div>
     )
 };

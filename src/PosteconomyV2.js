@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import {getGlobalState, setGlobalState} from './store'
-import PosteconomyDAO from './abis/PosteconomyDAO.json'
+import ManagerDAOs from './abis/ManagerDAOs.json'
 
 const {ethereum} = window
 
@@ -10,7 +10,7 @@ const connectWallet = async () => {
         const accounts = await ethereum.request({method: 'eth_requestAccounts'})
         setGlobalState('connectedAccount', accounts[0])
     } catch (error) {
-        console.log(JSON.stringify(error))
+        console.log('connectWallet', JSON.stringify(error))
     }
 }
 
@@ -23,63 +23,49 @@ const createDAO = async (name) => {
         await contract.methods.createDAO(name).send({from: account});
         location.reload();
     } catch (error) {
-        console.log(error)
+        console.log('createDAO', error);
     }
 };
 
-const joinDAO = async (daoId, account) => {
+const joinDAO = async (daoAddr, account) => {
     const contract = getGlobalState('contract')
 
     try {
-        await contract.methods.joinDAO(daoId).send({from: account});
+        await contract.methods.joinDAO(daoAddr).send({from: account});
         location.reload();
     } catch (error) {
-        console.log(error)
+        console.log('joinDAO', error)
     }
 };
 
-const isMember = async (daoId, member) => {
+const isMember = async (daoAddr, member) => {
     const contract = getGlobalState('contract')
     const account = getGlobalState('connectedAccount')
 
     try {
-        return await contract.methods.isMember(daoId, member).call();
+        return await contract.methods.isMember(daoAddr, member).call();
     } catch (error) {
-        console.log(error)
+        console.log('isMember', error)
     }
 };
 
-// Get the number of DAOs created
-const getDAOsCount = async () => {
-    const contract = getGlobalState('contract')
-    const account = getGlobalState('connectedAccount')
-    try {
-        return await contract.methods.getDAOsCount().call();
-    } catch (error) {
-        console.log(error)
-    }
-};
-
-// Get the members and name of a DAO
-const getDAO = async (daoId) => {
+const getDAO = async (daoAddr) => {
     const contract = getGlobalState('contract')
 
     try {
-        return await contract.methods.getDAO(daoId).call();
+        return await contract.methods.getDAO(daoAddr).call();
     } catch (error) {
-        console.log(error)
+        console.log('getDAO', error)
     }
 };
 
-// Get an array of all DAO names
 const getAllDAOs = async () => {
     const contract = getGlobalState('contract')
-    const account = getGlobalState('connectedAccount')
 
     try {
         return await contract.methods.getAllDAOs().call();
     } catch (error) {
-        console.log(error)
+        console.log('getAllDAOs', error)
     }
 };
 
@@ -222,11 +208,11 @@ const loadWeb3 = async () => {
         setGlobalState('connectedAccount', accounts[0])
 
         const networkId = await web3.eth.net.getId()
-        const networkData = PosteconomyDAO.networks[networkId]
+        const networkData = ManagerDAOs.networks[networkId]
 
         if (networkData) {
             const contract = new web3.eth.Contract(
-                PosteconomyDAO.abi,
+                ManagerDAOs.abi,
                 networkData.address
             )
             // const isStakeholder = await contract.methods
@@ -247,7 +233,7 @@ const loadWeb3 = async () => {
             // setGlobalState('isStakeholder', isStakeholder)
             // setGlobalState('proposals', structuredProposals(proposals))
         } else {
-            window.alert('PosteconomyDAO contract not deployed to detected network.')
+            window.alert('ManagerDAOs contract not deployed to detected network.')
         }
         return true
     } catch (error) {
@@ -282,7 +268,6 @@ export {
     connectWallet,
     createDAO,
     getDAO,
-    getDAOsCount,
     getAllDAOs,
     joinDAO,
     isMember,
