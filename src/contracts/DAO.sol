@@ -3,7 +3,7 @@ pragma solidity ^0.8.7;
 
 contract DAO {
     struct Proposal {
-        address proposer;
+        address initiator;
         string title;
         string description;
         uint256 votesFor;
@@ -17,11 +17,10 @@ contract DAO {
 
     mapping(uint256 => Proposal) public proposals;
     uint256 public proposalCount;
-//    mapping(address => bool) public membersMap;
 
-    constructor(string memory _name, address _creator) {
+    constructor(string memory _name, address _initiator) {
         name = _name;
-        members.push(_creator);
+        members.push(_initiator);
         membersCount++;
     }
 
@@ -30,11 +29,32 @@ contract DAO {
         membersCount++;
     }
 
-//    function createProposal(string memory _description) public {
-//        require(membersMap[msg.sender], "Only members can create proposals");
-//        proposals[proposalCount] = Proposal(msg.sender, _description, 0, 0, false);
-//        proposalCount++;
-//    }
+    function createProposal(
+        address _initiator,
+        string memory _title,
+        string memory _description
+    ) public {
+        proposals[proposalCount] = Proposal(
+            _initiator,
+            _title,
+            _description,
+            0,
+            0,
+            false
+        );
+        proposalCount++;
+    }
+
+    function getProposals() public view returns (Proposal[] memory) {
+        Proposal[] memory daoProposals = new Proposal[](proposalCount);
+
+        for (uint256 i = 0; i < proposalCount; i++) {
+            Proposal storage proposal = proposals[i];
+            daoProposals[i] = proposal;
+        }
+
+        return daoProposals;
+    }
 
 //    function vote(uint256 _proposalId, bool _inSupport) public {
 //        require(membersMap[msg.sender], "Only members can vote");

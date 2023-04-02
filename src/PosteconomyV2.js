@@ -1,6 +1,8 @@
 import Web3 from 'web3'
 import {getGlobalState, setGlobalState} from './store'
 import ManagerDAOs from './abis/ManagerDAOs.json'
+import DAO from './abis/DAO.json'
+
 
 const {ethereum} = window
 
@@ -70,24 +72,38 @@ const getAllDAOs = async () => {
 };
 
 
-const raiseProposal = async ({title, description, beneficiary, amount, initiator}) => {
+const createDAOproposal = async (contractAddr, title, description) => {
     try {
-        amount = window.web3.utils.toWei(amount.toString(), 'ether')
-        const contract = getGlobalState('contract')
-        const account = getGlobalState('connectedAccount')
+        const account = getGlobalState('connectedAccount');
+        const contractDAO = new web3.eth.Contract(
+            DAO.abi,
+            contractAddr
+        )
 
-        let proposal = await contract.methods
-            .createProposal(title, description, beneficiary, amount)
+        await contractDAO.methods
+            .createProposal(account, title, description)
             .send({from: account})
-
-        console.log(proposal)
-
-        return proposal
+        location.reload();
     } catch (error) {
         console.log(error.message)
         return error
     }
 }
+
+
+const getDAOproposals = async (contractAddr) => {
+    try {
+        const contractDAO = new web3.eth.Contract(
+            DAO.abi,
+            contractAddr
+        )
+
+        return await contractDAO.methods.getProposals().call();
+    } catch (error) {
+        console.log('getDAOproposals', error)
+    }
+};
+
 
 const performContribute = async (amount) => {
     try {
@@ -271,4 +287,6 @@ export {
     getAllDAOs,
     joinDAO,
     isMember,
+    createDAOproposal,
+    getDAOproposals,
 }

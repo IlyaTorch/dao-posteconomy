@@ -1,0 +1,22 @@
+.proposals-table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.proposals-table td, .proposals-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.proposals-table tr:nth-child(even){background-color: #f2f2f2;}
+
+.proposals-table tr:hover {background-color: #ddd;}
+
+.proposals-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #1d4ed8;
+  color: white;
+}

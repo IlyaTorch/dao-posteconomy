@@ -1,9 +1,9 @@
 .dao-page {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 20px;
-    width: 900px;
+    /*width: 1200px;*/
     margin: auto;
 }
 
@@ -12,9 +12,24 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    flex-grow: 1;
     gap: 20px;
-    width: 350px;
-    margin: auto;
+    margin-left: 350px;
+    /*width: 450px;*/
+    /*margin: auto;*/
+}
+.dao-page-main {
+    display: flex;
+    flex-direction: column;
+    margin-right: 450px;
+
+    /*align-items: center;*/
+    /*justify-content: flex-start;*/
+    flex-grow: 2;
+    /*height: 800px;*/
+    gap: 20px;
+    /*width: 450px;*/
+    /*margin: auto;*/
 }
 .li-member {
     font-size: 10px;
