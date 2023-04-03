@@ -68,9 +68,9 @@ const DAOProposals = ({data}) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {proposals.map((proposal, id) => (
+                    {proposals.map((proposal) => (
                         <tr
-                            key={id}
+                            key={proposal.id}
                         >
                             <td>
                                 <div className="flex">
@@ -90,7 +90,7 @@ const DAOProposals = ({data}) => {
                             </td>
                             <td>
                                 <Link
-                                    to={'/proposal/' + proposal.id}
+                                    to={`proposal/${proposal.id}`}
                                 >
                                     <b>View</b>
                                 </Link>

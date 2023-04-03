@@ -20,14 +20,14 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 dark:bg-[#212936] dark:text-gray-300">
-      {loaded ? (
+      {loaded && (
         <Routes>
           <Route path="/" element={<Home/>} />
-          <Route path="proposal/:id" element={<Proposal/>} />
+          <Route path="dao/:addr/proposal/:id" element={<Proposal/>} />
           <Route path="dao/:addr" element={<DAO/>} />
           {/* <Route path="chat/:gid" element={<Chat />} /> */}
         </Routes>
-      ) : null}
+      )}
 
       <ToastContainer
         position="top-center"

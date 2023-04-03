@@ -1,11 +1,12 @@
 const proposalArrayToObj = (prop) => {
     return {
-            initiator: prop[0],
-            title: prop[1],
-            description: prop[2],
-            votesFor: parseInt(prop[3]),
-            votesAgainst: parseInt(prop[4]),
-            executed: prop[5],
+            id: parseInt(prop[0]),
+            initiator: prop[1],
+            title: prop[2],
+            description: prop[3],
+            votesFor: parseInt(prop[4]),
+            votesAgainst: parseInt(prop[5]),
+            executed: prop[6],
         }
 };
 

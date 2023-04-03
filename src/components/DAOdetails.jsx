@@ -17,11 +17,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
             setMembers(res[2]);
         });
         getDAOproposals(daoAddr).then(res => {
-            const daoProposals = [];
-            for(let i = 0; i < res.length; i++) {
-                daoProposals.push(proposalArrayToObj(res[i]))
-            }
-            setProposals(daoProposals)
+            setProposals(res)
         })
 
     }, [daoAddr]);

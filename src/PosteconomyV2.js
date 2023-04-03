@@ -2,6 +2,7 @@ import Web3 from 'web3'
 import {getGlobalState, setGlobalState} from './store'
 import ManagerDAOs from './abis/ManagerDAOs.json'
 import DAO from './abis/DAO.json'
+import {proposalArrayToObj} from "./utils";
 
 
 const {ethereum} = window
@@ -42,7 +43,6 @@ const joinDAO = async (daoAddr, account) => {
 
 const isMember = async (daoAddr, member) => {
     const contract = getGlobalState('contract')
-    const account = getGlobalState('connectedAccount')
 
     try {
         return await contract.methods.isMember(daoAddr, member).call();
@@ -91,123 +91,62 @@ const createDAOproposal = async (contractAddr, title, description) => {
 }
 
 
-const getDAOproposals = async (contractAddr) => {
+const getDAOproposals = async (daoAddr) => {
     try {
         const contractDAO = new web3.eth.Contract(
             DAO.abi,
-            contractAddr
+            daoAddr
         )
 
-        return await contractDAO.methods.getProposals().call();
+        const proposals = await contractDAO.methods.getProposals().call();
+        const daoProposals = [];
+
+        for (let i = 0; i < proposals.length; i++) {
+            daoProposals.push(proposalArrayToObj(proposals[i]))
+        }
+        setGlobalState('proposals', daoProposals);
+        return daoProposals;
     } catch (error) {
         console.log('getDAOproposals', error)
     }
 };
 
 
-const performContribute = async (amount) => {
-    try {
-        amount = window.web3.utils.toWei(amount.toString(), 'ether')
-        const contract = getGlobalState('contract')
-        const account = getGlobalState('connectedAccount')
-
-        let balance = await contract.methods
-            .contribute()
-            .send({from: account, value: amount})
-        balance = window.web3.utils.fromWei(
-            balance.events.Action.returnValues.amount
-        )
-        return balance
-    } catch (error) {
-        console.log(error.message)
-        return error
-    }
-}
-
-const retrieveProposal = async (id) => {
-    const web3 = window.web3
-    try {
-        const contract = getGlobalState('contract')
-        const proposal = await contract.methods.getProposal(id).call().wait()
-        return {
-            id: proposal.id,
-            amount: web3.utils.fromWei(proposal.amount),
-            title: proposal.title,
-            description: proposal.description,
-            paid: proposal.paid,
-            passed: proposal.passed,
-            proposer: proposal.proposer,
-            upvotes: Number(proposal.upvotes),
-            downvotes: Number(proposal.downvotes),
-            beneficiary: proposal.beneficiary,
-            executor: proposal.executor,
-            duration: proposal.duration,
-        }
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-const reconstructProposal = (proposal) => {
-    return {
-        id: proposal.id,
-        amount: window.web3.utils.fromWei(proposal.amount),
-        title: proposal.title,
-        description: proposal.description,
-        paid: proposal.paid,
-        passed: proposal.passed,
-        proposer: proposal.proposer,
-        upvotes: Number(proposal.upvotes),
-        downvotes: Number(proposal.downvotes),
-        beneficiary: proposal.beneficiary,
-        executor: proposal.executor,
-        duration: proposal.duration,
-    }
-}
-
 const getProposal = async (id) => {
     try {
         const proposals = getGlobalState('proposals')
-        return proposals.find((proposal) => proposal.id == id)
+        return proposals.find((proposal) => proposal.id === id)
     } catch (error) {
-        console.log(error)
+        console.log('getProposal', error)
     }
 }
 
-const voteOnProposal = async (proposalId, supported) => {
+
+const voteOnProposal = async (daoAddr, proposalId, choice) => {
     try {
-        const contract = getGlobalState('contract')
+        const contractDAO = new web3.eth.Contract(
+            DAO.abi,
+            daoAddr
+        )
         const account = getGlobalState('connectedAccount')
-        const vote = await contract.methods
-            .performVote(proposalId, supported)
+        return await contractDAO.methods
+            .vote(proposalId, choice)
             .send({from: account})
-        return vote
     } catch (error) {
-        console.log(error)
+        console.log('voteOnProposal', error)
         return error
     }
 }
 
-const listVoters = async (id) => {
+const listVoters = async (daoAddr, proposalId) => {
     try {
-        const contract = getGlobalState('contract')
-        const votes = await contract.methods.getVotesOf(id).call()
-        return votes
+        const contractDAO = new web3.eth.Contract(
+            DAO.abi,
+            daoAddr
+        )
+        return await contractDAO.methods.getVotesOf(proposalId).call();
     } catch (error) {
-        console.log(error)
-    }
-}
-
-const payoutBeneficiary = async (id) => {
-    try {
-        const contract = getGlobalState('contract')
-        const account = getGlobalState('connectedAccount')
-        const balance = await contract.methods
-            .payBeneficiary(id)
-            .send({from: account})
-        return balance
-    } catch (error) {
-        return error
+        console.log('listVoters', error)
     }
 }
 
@@ -289,4 +228,7 @@ export {
     isMember,
     createDAOproposal,
     getDAOproposals,
+    getProposal,
+    voteOnProposal,
+    listVoters
 }
