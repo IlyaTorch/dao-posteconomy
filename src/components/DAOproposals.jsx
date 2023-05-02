@@ -83,10 +83,10 @@ const DAOProposals = ({data}) => {
                                 </div>
                             </td>
                             <td>
-                                {proposal.title}
+                                {proposal.title.substring(0, 15)}
                             </td>
                             <td>
-                                {proposal.description.substring(0, 80) + '...'}
+                                {proposal.description.substring(0, 15) + '...'}
                             </td>
                             <td>
                                 <Link

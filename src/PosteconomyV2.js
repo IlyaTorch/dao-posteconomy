@@ -72,7 +72,7 @@ const getAllDAOs = async () => {
 };
 
 
-const createDAOproposal = async (contractAddr, title, description) => {
+const createDAOproposal = async (contractAddr, title, description, beneficiaryAddr) => {
     try {
         const account = getGlobalState('connectedAccount');
         const contractDAO = new web3.eth.Contract(
@@ -170,23 +170,11 @@ const loadWeb3 = async () => {
                 ManagerDAOs.abi,
                 networkData.address
             )
-            // const isStakeholder = await contract.methods
-            //   .isStakeholder()
-            //   .call({ from: accounts[0] })
-            // const proposals = await contract.methods.getProposals().call()
-            // const balance = await contract.methods.daoBalance().call()
-            // const mybalance = await contract.methods
-            //   .getBalance()
-            //   .call({ from: accounts[0] })
 
             setGlobalState('contract', contract)
 
             const daos = await contract.methods.getAllDAOs().call()
             setGlobalState('daos', daos)
-            // setGlobalState('balance', web3.utils.fromWei(balance))
-            // setGlobalState('mybalance', web3.utils.fromWei(mybalance))
-            // setGlobalState('isStakeholder', isStakeholder)
-            // setGlobalState('proposals', structuredProposals(proposals))
         } else {
             window.alert('ManagerDAOs contract not deployed to detected network.')
         }
@@ -198,25 +186,6 @@ const loadWeb3 = async () => {
     }
 }
 
-const structuredProposals = (proposals) => {
-    const web3 = window.web3
-    return proposals
-        .map((proposal) => ({
-            id: proposal.id,
-            amount: web3.utils.fromWei(proposal.amount),
-            title: proposal.title,
-            description: proposal.description,
-            paid: proposal.paid,
-            passed: proposal.passed,
-            proposer: proposal.proposer,
-            upvotes: Number(proposal.upvotes),
-            downvotes: Number(proposal.downvotes),
-            beneficiary: proposal.beneficiary,
-            executor: proposal.executor,
-            duration: proposal.duration,
-        }))
-        .reverse()
-}
 
 export {
     loadWeb3,

@@ -3,9 +3,10 @@ import { FaTimes } from 'react-icons/fa'
 import { raiseProposal } from '../Posteconomy'
 import { setGlobalState, useGlobalState } from '../store'
 import { toast } from 'react-toastify'
+import {createDAOproposal} from "../PosteconomyV2";
 
-const CreateProposal = () => {
-  const [createModal] = useGlobalState('createModal')
+const CreateProposal = ({daoAddr}) => {
+  const [createProposalModal] = useGlobalState('createProposalModal')
   const [title, setTitle] = useState('')
   const [initiator, setInitiator] = useState('')
   const [amount, setAmount] = useState('')
@@ -14,20 +15,17 @@ const CreateProposal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!title || !description || !beneficiary || !amount || !initiator) return
-    const proposal = { title, description, beneficiary, amount, initiator }
-
-    raiseProposal(proposal).then((proposed) => {
-      if (proposed) {
-        toast.success('Proposal created, reloading in progress...')
-        closeModal()
-        // window.location.reload()
-      }
+    // if (!title || !description || !beneficiary || !amount || !initiator) return
+    createDAOproposal(daoAddr, title, description, beneficiary).then(res => {
+      console.log(res)
+      toast.success('Proposal created, reloading in progress...')
+      closeModal()
+      // window.location.reload()
     })
   }
 
   const closeModal = () => {
-    setGlobalState('createModal', 'scale-0')
+    setGlobalState('createProposalModal', 'scale-0')
     resetForm()
   }
 
@@ -43,8 +41,9 @@ const CreateProposal = () => {
     <div
       className={`fixed top-0 left-0 w-screen h-screen flex items-center
       justify-center bg-black bg-opacity-50 transform z-50
-      transition-transform duration-300 ${createModal}`}
+      transition-transform duration-300 ${createProposalModal}`}
     >
+      <h1>Test</h1>
       <div className="bg-white dark:bg-[#212936] shadow-xl shadow-[#122643] dark:shadow-gray-500 rounded-xl w-11/12 md:w-2/5 h-7/12 p-6">
         <form className="flex flex-col">
           <div className="flex flex-row justify-between items-center">
@@ -72,33 +71,33 @@ const CreateProposal = () => {
             />
           </div>
 
-          <div className="flex flex-row justify-between items-center border border-gray-500 dark:border-gray-500 rounded-xl mt-5">
-            <input
-              className="block w-full text-sm
-              bg-transparent border-0
-              focus:outline-none focus:ring-0"
-              type="text"
-              name="initiator"
-              placeholder="Initiator's address"
-              onChange={(e) => setInitiator(e.target.value)}
-              value={initiator}
-              required
-            />
-          </div>
+          {/*<div className="flex flex-row justify-between items-center border border-gray-500 dark:border-gray-500 rounded-xl mt-5">*/}
+          {/*  <input*/}
+          {/*    className="block w-full text-sm*/}
+          {/*    bg-transparent border-0*/}
+          {/*    focus:outline-none focus:ring-0"*/}
+          {/*    type="text"*/}
+          {/*    name="initiator"*/}
+          {/*    placeholder="Initiator's address"*/}
+          {/*    onChange={(e) => setInitiator(e.target.value)}*/}
+          {/*    value={initiator}*/}
+          {/*    required*/}
+          {/*  />*/}
+          {/*</div>*/}
 
-          <div className="flex flex-row justify-between items-center border border-gray-500 dark:border-gray-500 rounded-xl mt-5">
-            <input
-              className="block w-full text-sm
-              bg-transparent border-0
-              focus:outline-none focus:ring-0"
-              type="text"
-              name="amount"
-              placeholder="Amount required to complete the initiative, e.g 2.5 Eth"
-              onChange={(e) => setAmount(e.target.value)}
-              value={amount}
-              required
-            />
-          </div>
+          {/*<div className="flex flex-row justify-between items-center border border-gray-500 dark:border-gray-500 rounded-xl mt-5">*/}
+          {/*  <input*/}
+          {/*    className="block w-full text-sm*/}
+          {/*    bg-transparent border-0*/}
+          {/*    focus:outline-none focus:ring-0"*/}
+          {/*    type="text"*/}
+          {/*    name="amount"*/}
+          {/*    placeholder="Amount required to complete the initiative, e.g 2.5 Eth"*/}
+          {/*    onChange={(e) => setAmount(e.target.value)}*/}
+          {/*    value={amount}*/}
+          {/*    required*/}
+          {/*  />*/}
+          {/*</div>*/}
 
           <div className="flex flex-row justify-between items-center border border-gray-500 dark:border-gray-500 rounded-xl mt-5">
             <input

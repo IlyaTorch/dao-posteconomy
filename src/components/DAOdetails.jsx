@@ -4,6 +4,8 @@ import DAOitem from "../components/DAOitem";
 import "../styles/DAOdetails.css";
 import {proposalArrayToObj} from "../utils";
 import DAOProposals from "./DAOproposals";
+import CreateProposal from "./CreateProposal";
+import {setGlobalState} from "../store";
 
 
 const DAOdetails = ({daoId, daoAddr}) => {
@@ -23,8 +25,9 @@ const DAOdetails = ({daoId, daoAddr}) => {
     }, [daoAddr]);
 
     const onCreateProposal = () => {
-        const title = "test-title";
-        const description = "test-description";
+        setGlobalState('createProposalModal', '')
+        // const title = "test-title";
+        // const description = "test-description";
         createDAOproposal(daoAddr, title, description).then(res => console.log(res))
     }
 
@@ -42,6 +45,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
                 <DAOProposals data={proposals}/>
                 <br/>
                 <br/>
+                <CreateProposal daoAddr={daoAddr}/>
                 <button onClick={onCreateProposal}>Create Proposal</button>
             </div>
         </div>
