@@ -10,6 +10,8 @@ contract DAO {
         uint256 votesFor;
         uint256 votesAgainst;
         bool executed;
+        uint256 amount;
+        address payable beneficiary;
     }
     struct VotedStruct {
         address voter;
@@ -40,7 +42,8 @@ contract DAO {
     function createProposal(
         address _initiator,
         string memory _title,
-        string memory _description
+        string memory _description,
+        address beneficiary
     ) public {
         proposals[proposalCount] = Proposal(
             proposalCount,
@@ -49,7 +52,9 @@ contract DAO {
             _description,
             0,
             0,
-            false
+            false,
+            0,
+            payable(beneficiary)
         );
         proposalCount++;
     }
@@ -65,7 +70,7 @@ contract DAO {
         return daoProposals;
     }
 
-    function vote(uint256 _proposalId, bool choice) public {
+    function vote(uint256 _proposalId, bool choice) payable public {
         require(isMember(msg.sender), "Only members can vote");
         Proposal storage proposal = proposals[_proposalId];
         require(!proposal.executed, "Proposal has already been executed");
@@ -75,8 +80,9 @@ contract DAO {
                 revert("Double voting not allowed");
         }
 
-        if (choice) {
+        if (msg.value > 0) {
             proposal.votesFor++;
+            proposal.amount += msg.value;
         } else {
             proposal.votesAgainst++;
         }

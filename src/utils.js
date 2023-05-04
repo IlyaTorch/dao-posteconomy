@@ -7,6 +7,7 @@ const proposalArrayToObj = (prop) => {
             votesFor: parseInt(prop[4]),
             votesAgainst: parseInt(prop[5]),
             executed: prop[6],
+            amount: parseInt(prop.amount),
         }
 };
 

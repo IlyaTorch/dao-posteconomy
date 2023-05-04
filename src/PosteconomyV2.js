@@ -81,7 +81,7 @@ const createDAOproposal = async (contractAddr, title, description, beneficiaryAd
         )
 
         await contractDAO.methods
-            .createProposal(account, title, description)
+            .createProposal(account, title, description, beneficiaryAddr)
             .send({from: account})
         location.reload();
     } catch (error) {
@@ -122,7 +122,7 @@ const getProposal = async (id) => {
 }
 
 
-const voteOnProposal = async (daoAddr, proposalId, choice) => {
+const voteOnProposal = async (daoAddr, proposalId, amount) => {
     try {
         const contractDAO = new web3.eth.Contract(
             DAO.abi,
@@ -130,8 +130,8 @@ const voteOnProposal = async (daoAddr, proposalId, choice) => {
         )
         const account = getGlobalState('connectedAccount')
         return await contractDAO.methods
-            .vote(proposalId, choice)
-            .send({from: account})
+            .vote(proposalId, amount > 0)
+            .send({from: account, value: amount})
     } catch (error) {
         console.log('voteOnProposal', error)
         return error
