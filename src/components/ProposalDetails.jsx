@@ -13,6 +13,7 @@ import {
 } from 'recharts'
 import {getDAOproposals, getProposal, isMember, voteOnProposal, listVoters} from '../PosteconomyV2'
 import {useGlobalState} from '../store'
+import ContractEditor from "./ContractEditor";
 
 const ProposalDetails = () => {
     const {addr, id} = useParams()
@@ -142,6 +143,15 @@ const ProposalDetails = () => {
         </div>
 
                 ) : null}
+        <br/>
+        <br/>
+        <br/>
+        {daoMember && voted && (
+        <div>
+            <h2 className="font-semibold text-3xl mb-5">Change the Initiative</h2>
+            <ContractEditor title={proposal?.title} description={proposal?.description}/>
+        </div>
+        )}
 
         </div>
     )
