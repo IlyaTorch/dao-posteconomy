@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { loadWeb3 } from './PosteconomyV2'
+import { loadWeb3, createInitialData } from './PosteconomyV2'
 import { ToastContainer } from 'react-toastify'
 // import { isUserLoggedIn } from './CometChat'
 import Home from './views/Home'

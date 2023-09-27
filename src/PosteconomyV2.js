@@ -173,6 +173,8 @@ const loadWeb3 = async () => {
 
             setGlobalState('contract', contract)
 
+            await createInitialData(contract)
+
             const daos = await contract.methods.getAllDAOs().call()
             setGlobalState('daos', daos)
         } else {
@@ -183,6 +185,40 @@ const loadWeb3 = async () => {
         alert('Please connect your metamask wallet V2!')
         console.log(error)
         return false
+    }
+}
+
+
+const createInitialData = async (contract) => {
+    const DAO_NAMES = [
+        'developers',
+        'qa',
+        'recruiters',
+        'finanical',
+        'Mexico Trip',
+        'Gdansk Community'
+    ]
+
+    let existing_dao_addrs = await contract.methods.getAllDAOs().call() || []
+    let existing_dao_names = []
+    for (let i = 0; i < existing_dao_addrs.length; i++) {
+        const dao = await contract.methods.getDAO(existing_dao_addrs[i]).call();
+        existing_dao_names.push(dao[0])
+    }
+    console.log('existing_dao_names')
+    console.log(existing_dao_names)
+    const account = getGlobalState('connectedAccount')
+    console.log(account)
+    console.log(contract)
+
+    for (let i = 0; i < DAO_NAMES.length; i++) {
+        if (!existing_dao_names.includes(DAO_NAMES[i])) {
+            await contract.methods.createDAO(DAO_NAMES[i]).send({from: account});
+            existing_dao_addrs = await contract.methods.getAllDAOs().call() || []
+            const last = existing_dao_addrs[existing_dao_addrs.length -1]
+            await contract.methods.addDefaultMembersToDAO(last).send({from: account});
+            console.log(DAO_NAMES[i])
+        }
     }
 }
 
@@ -199,5 +235,6 @@ export {
     getDAOproposals,
     getProposal,
     voteOnProposal,
-    listVoters
+    listVoters,
+    createInitialData,
 }
