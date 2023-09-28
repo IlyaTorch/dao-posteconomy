@@ -2,6 +2,8 @@ import {useParams} from "react-router-dom";
 import Header from "../components/Header";
 import DAOdetails from "../components/DAOdetails";
 import {useGlobalState} from "../store";
+import SidebarPanel from "../components/SidebarPanel";
+import "../styles/DAO.css";
 
 
 const DAO = () => {
@@ -12,11 +14,14 @@ const DAO = () => {
     return (
         <>
             <Header/>
-            <br/>
-            <DAOdetails
-                daoId={id}
-                daoAddr={addr}
-            />
+            <div className="container">
+                <SidebarPanel/>
+                <DAOdetails
+                    daoId={id}
+                    daoAddr={addr}
+                />
+            </div>
+
         </>
     )
 };

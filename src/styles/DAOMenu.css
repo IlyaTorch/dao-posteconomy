@@ -1,0 +1,20 @@
+.dao-menu {
+    width: 235px;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    background-color: #F7F7F7;
+}
+.dao-menu-item {
+    margin-top: 8px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 25px;
+    font-size: 18px;
+    cursor: pointer;
+}
+.item-active {
+    border-left: 2px solid #000000;
+}

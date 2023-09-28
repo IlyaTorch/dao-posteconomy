@@ -1,4 +1,5 @@
 .dao-item {
+    width: 235px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,6 +9,7 @@
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
     text-align: center;
+    background-color: #F7F7F7;
 }
 
 .dao-item img {
@@ -17,10 +19,10 @@
 
 .dao-item .button-join {
     width: 150px;
-    background-color: #008CBA; /* Blue */
+    background-color: #EEEDED;
     border: none;
-    border-radius: 15%;
-    color: white;
+    border-radius: 30px;
+    color: #333333;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
@@ -30,9 +32,9 @@
 
 .dao-item .button-member {
     width: 150px;
-    background-color: #4CAF50; /* Green */
+    background-color: #7380FF;
     border: none;
-    border-radius: 15%;
+    border-radius: 30px;
     color: white;
     padding: 15px 32px;
     text-align: center;

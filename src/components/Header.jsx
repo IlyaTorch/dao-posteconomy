@@ -59,19 +59,20 @@ const Header = () => {
 
               {connectedAccount ? (
                 <button
-                  className="px-4 py-2.5 bg-blue-600 text-white
+                  className="px-4 py-2.5 text-white
                   font-medium text-xs leading-tight uppercase
                   rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg
                   focus:bg-blue-700 focus:shadow-lg focus:outline-none
                   focus:ring-0 active:bg-blue-800 active:shadow-lg
                   transition duration-150 ease-in-out dark:text-blue-500
                   dark:border dark:border-blue-500 dark:bg-transparent"
+                  style={{'background-color': '#7380FF'}}
                 >
                   {connectedAccount}
                 </button>
               ) : (
                 <button
-                  className="px-4 py-2.5 bg-blue-600 text-white
+                  className="px-4 py-2.5 text-white
                   font-medium text-xs leading-tight uppercase
                   rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg
                   focus:bg-blue-700 focus:shadow-lg focus:outline-none
@@ -79,6 +80,7 @@ const Header = () => {
                   transition duration-150 ease-in-out dark:text-blue-500
                   dark:border dark:border-blue-500 dark:bg-transparent"
                   onClick={connectWallet}
+                  style={{'background-color': '#7380FF'}}
                 >
                   Connect Wallet
                 </button>

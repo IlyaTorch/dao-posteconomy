@@ -12,6 +12,7 @@ const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   balance: 0,
   mybalance: 0,
   proposals: [],
+  daoDetailsMenuItem: 'members',
 })
 
 const truncate = (text, startChars, endChars, maxLength) => {

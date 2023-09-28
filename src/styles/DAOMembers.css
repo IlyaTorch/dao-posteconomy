@@ -1,0 +1,46 @@
+.dao-members-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.dao-members-header {
+    color: #4F4F4F;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.dao-member {
+    width: 230px;
+    height: 230px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    text-align: center;
+    background-color: #F7F7F7;
+}
+
+.dao-member-avatar img {
+    width: 150px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+}
+
+.dao-member-name {
+    color: #333333;
+    font-size: 18px;
+    font-weight: bold;
+    word-wrap: break-word
+}
+
+.dao-member-email {
+    color: #333333;
+    font-size: 16px;
+    font-weight: 400;
+    word-wrap: break-word
+}
