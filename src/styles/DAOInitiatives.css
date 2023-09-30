@@ -1,0 +1,58 @@
+.dao-initiatives-header {
+    color: #4F4F4F;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.dao-initiatives-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 750px;
+}
+
+.dao-initiative-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.dao-initiative-header img{
+    width: 35px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+    margin-right: 10px;
+
+}
+.dao-initiative h2{
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.dao-initiatives-list {
+    width: 750px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dao-initiative {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    background-color: #F7F7F7;
+}
+
+.dao-initiative-status {
+    width: 70px;
+    padding: 5px 13px;
+    background: #BDBDBD;
+    color: #F7F7F7;
+    border-radius: 30px;
+}

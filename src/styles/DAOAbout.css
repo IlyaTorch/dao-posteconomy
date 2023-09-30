@@ -1,0 +1,42 @@
+.dao-about-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 750px;
+}
+
+.dao-about-header {
+    color: #4F4F4F;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.dao-about-item {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    background-color: #F7F7F7;
+}
+.dao-about-item h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.dao-about-admin {
+    margin-bottom: 10px;
+}
+
+.dao-about-admin img {
+    width: 35px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+}
+
+.dao-about-admin span {
+    margin-left: 10px;
+}

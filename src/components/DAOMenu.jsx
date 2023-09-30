@@ -17,7 +17,14 @@ const DAOMenu = () => {
                 onClick={() => {
                 setGlobalState('daoDetailsMenuItem', 'members')
             }}>Members</div>
-            <div className="dao-menu-item">About</div>
+            <div
+                className={"dao-menu-item " + (getGlobalState('daoDetailsMenuItem') === 'about' ? 'item-active' : '')}
+                onClick={() => {
+                    setGlobalState('daoDetailsMenuItem', 'about')
+                }}
+            >
+                About
+            </div>
         </div>
     )
 };

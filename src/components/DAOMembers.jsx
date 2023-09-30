@@ -4,9 +4,9 @@ import "../styles/DAOMembers.css";
 const DAOMembers = ({members}) => {
 
     return (
-        <div>
+        <div className="dao-members-container">
             <h1 className="dao-members-header">Members</h1>
-            <div className="dao-members-container">
+            <div className="dao-members-list">
             {
                 members.map(member =>
                     <div className="dao-member">
