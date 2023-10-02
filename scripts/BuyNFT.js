@@ -6,6 +6,7 @@ const fromWei = (num) => web3.utils.fromWei(num.toString())
 module.exports = async (callback) => {
   const [deployer, buyer1] = await web3.eth.getAccounts()
 
+
   const COST = toWei(0.01)
   const TITLE = 'Soul McCullough'
   const DESCRIPTION =

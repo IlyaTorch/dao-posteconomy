@@ -18,12 +18,12 @@ const connectWallet = async () => {
 }
 
 
-const createDAO = async (name) => {
+const createDAO = async (name, description) => {
     const contract = getGlobalState('contract')
     const account = getGlobalState('connectedAccount')
 
     try {
-        await contract.methods.createDAO(name).send({from: account});
+        await contract.methods.createDAO(name, description).send({from: account});
         location.reload();
     } catch (error) {
         console.log('createDAO', error);
@@ -191,12 +191,11 @@ const loadWeb3 = async () => {
 
 const createInitialData = async (contract) => {
     const DAO_NAMES = [
-        'developers',
-        'qa',
-        'recruiters',
-        'finanical',
-        'Mexico Trip',
-        'Gdansk Community'
+        {name: 'developers', description: 'Developer DAO is a community of thousands of web3 builders creating a better internet. Join us and create the future.'},
+        {name: 'qa', description: 'Quality Assurance DAO (QA-DAO) is an ongoing open source project that provides support for and is funded by the Cardano Project Catalyst Community.'},
+        {name: 'recruiters', description: 'Recruitment for QA testers of all types. Our QA recruiters can find your perfect match for any level of experience or skill set requirements. Whether you need a manual or automated tester, employee (W2) or contractor (1099), website, software, or iOS/Android mobile app testing, we’re here to help you and your Engineering team find the right fit.'},
+        {name: 'finmaker', description: 'Dai is a stable, decentralized currency that does not discriminate. Any individual or business can realize the advantages of digital money.'},
+        {name: 'Mexico Trip', description: 'DAO of Mexico Trip 14 jul 2022'},
     ]
 
     let existing_dao_addrs = await contract.methods.getAllDAOs().call() || []
@@ -205,19 +204,17 @@ const createInitialData = async (contract) => {
         const dao = await contract.methods.getDAO(existing_dao_addrs[i]).call();
         existing_dao_names.push(dao[0])
     }
-    console.log('existing_dao_names')
-    console.log(existing_dao_names)
     const account = getGlobalState('connectedAccount')
-    console.log(account)
-    console.log(contract)
 
     for (let i = 0; i < DAO_NAMES.length; i++) {
-        if (!existing_dao_names.includes(DAO_NAMES[i])) {
-            await contract.methods.createDAO(DAO_NAMES[i]).send({from: account});
+        if (!existing_dao_names.includes(DAO_NAMES[i].name)) {
+            await contract.methods.createDAO(
+                DAO_NAMES[i].name,
+                DAO_NAMES[i].description
+            ).send({from: account});
             existing_dao_addrs = await contract.methods.getAllDAOs().call() || []
             const last = existing_dao_addrs[existing_dao_addrs.length -1]
             await contract.methods.addDefaultMembersToDAO(last).send({from: account});
-            console.log(DAO_NAMES[i])
         }
     }
 }

@@ -9,6 +9,7 @@ import DAOMenu from "./DAOMenu";
 import DAOMembers from "./DAOMembers";
 import DAOAbout from "./DAOAbout";
 import DAOInitiatives from "./DAOInitiatives";
+import {prepareMembers} from "../utils";
 
 
 const DAOdetails = ({daoId, daoAddr}) => {
@@ -16,12 +17,11 @@ const DAOdetails = ({daoId, daoAddr}) => {
     const [members, setMembers] = useState([])
     const [proposals, setProposals] = useState([])
     const menuItem = getGlobalState('daoDetailsMenuItem')
-    console.log('menuItem', menuItem)
 
     useEffect(() => {
         getDAO(daoAddr).then(res => {
             setName(res[0]);
-            setMembers(res[2]);
+            setMembers(prepareMembers(res[3]));
         });
         getDAOproposals(daoAddr).then(res => {
             setProposals(res)
@@ -41,40 +41,22 @@ const DAOdetails = ({daoId, daoAddr}) => {
             <div className="dao-page-short-info">
                 <DAOitem id={daoId} addr={daoAddr} name={name}/>
                 <DAOMenu/>
-                <span className="dao-page-members-header">Our Members:</span>
-                <ul>
-                    {members.map((member, i) => <li key={i} className="li-member">{member}</li>)}
-                </ul>
             </div>
             <div className="dao-page-main">
                 {
-                    menuItem === 'members' && <DAOMembers members={
-                        [
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            {email: 'test@me.com', name: 'Ilya Torch', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                        ]
-                    }/>
+                    menuItem === 'members' && <DAOMembers members={members}/>
                 }
                 {
                     menuItem === 'initiatives' && <div>
                         {/*<span className="dao-page-initiatives-header">DAO Initiatives</span>*/}
-                        {/*<DAOProposals data={proposals}/>*/}
-                        <DAOInitiatives initiatives={[
-                            {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
-                            {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
-                            {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
-                            {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
-                            {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
-                            {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
+                        <DAOProposals data={proposals}/>
+                        <DAOInitiatives initiatives={[...proposals
+                            // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
+                            // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
+                            // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
+                            // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
+                            // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
+                            // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
                         ]}/>
                         <CreateProposal daoAddr={daoAddr}/>
                         <button onClick={onCreateProposal}>Create Proposal</button>
@@ -84,10 +66,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
                     menuItem === 'about' && <div>
                         <DAOAbout
                             description="Each of us understands the obvious: the beginning of the daily work of forming a position largely determines the importance of the corresponding activation conditions. It should be noted that a high-quality prototype of a future project helps improve the quality of the priority requirements. Only direct participants in technical progress are functionally separated into independent elements."
-                            administrators={[
-                                {name: 'Ilya Admin', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                                {name: 'Admin Ilya', avatar: 'https://robohash.org/0?set=set2&size=180x180'},
-                            ]}
+                            administrators={members.slice(0, 2)}
                         />
                     </div>
                 }

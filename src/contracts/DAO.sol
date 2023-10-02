@@ -20,6 +20,7 @@ contract DAO {
     }
 
     string public name;
+    string public description;
     address[] public members;
     uint256 public membersCount;
 
@@ -28,8 +29,9 @@ contract DAO {
     mapping(address => uint256[]) private stakeholderVotes;
     mapping(uint256 => VotedStruct[]) private votedOn;
 
-    constructor(string memory _name, address _initiator) {
+    constructor(string memory _name, string memory _description, address _initiator) {
         name = _name;
+        description = _description;
         members.push(_initiator);
         membersCount++;
     }

@@ -11,8 +11,8 @@ contract ManagerDAOs {
     event DAOCreated(address dao, string name);
     event DAOJoined(address dao, address member);
 
-    function createDAO(string memory _name) public {
-        DAO newDAO = new DAO(_name, msg.sender);
+    function createDAO(string memory _name, string memory _description) public {
+        DAO newDAO = new DAO(_name, _description, msg.sender);
         daos[address(newDAO)] = newDAO;
         daoAddresses.push(address(newDAO));
 
@@ -61,7 +61,7 @@ contract ManagerDAOs {
         return false;
     }
 
-    function getDAO(address _dao) public view returns (string memory, uint256, address[] memory) {
+    function getDAO(address _dao) public view returns (string memory, string memory, uint256, address[] memory) {
         DAO dao = daos[_dao];
         address[] memory daoMemers = new address[](dao.membersCount());
 
@@ -69,7 +69,7 @@ contract ManagerDAOs {
             daoMemers[i] = dao.members(i);
         }
 
-        return (dao.name(), dao.membersCount(), daoMemers);
+        return (dao.name(), dao.description(), dao.membersCount(), daoMemers);
     }
 
     function getAllDAOs() public view returns (address[] memory) {

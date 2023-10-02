@@ -1,0 +1,182 @@
+.initiative-page {
+    width: 1050px;
+    margin: 20px auto;
+    display: flex;
+}
+
+.initiative-page .main {
+    width: 700px;
+}
+
+.initiative-page .sidebar {
+    margin-top: 20px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.initiative-page .sidebar .info {
+    padding: 20px;
+}
+
+.initiative-page .sidebar .info .author {
+    margin-top: 10px;
+    color: #333333;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.initiative-page .sidebar .info .author img {
+    margin-top: 3px;
+    width: 35px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+}
+.initiative-page .sidebar .info .author span {
+    margin-left: 10px;
+    font-weight: normal;
+}
+.initiative-page .sidebar .info .date {
+    margin-top: 10px;
+}
+.initiative-page .sidebar .info h1 {
+    color: #333333;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.initiative-page .sidebar .info{
+    background: #F7F7F7;
+    border-radius: 10px;
+}
+
+.sidebar .buttons div {
+    margin-top: 15px;
+    text-align: center;
+    background: #F7F7F7;
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.main .header {
+    color: #333333;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.main .short {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main .short .status {
+    width: 70px;
+    padding: 5px 13px;
+    background: #BDBDBD;
+    color: #F7F7F7;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}
+
+.main .short img {
+    width: 35px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+}
+
+.main .short span {
+    margin-left: 10px;
+}
+
+.main .short .share {
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 8px;
+    cursor: pointer;
+}
+.main .short .share * {
+    display: inline;
+}
+
+.main .description {
+    margin-top: 10px;
+    text-align: justify;
+}
+
+.main .vote {
+    margin-top: 20px;
+    border: 1px #BDBDBD solid;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.main .vote h2 {
+    color: #333333;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.main .vote div {
+    border-radius: 50px;
+    border: 1px #BDBDBD solid;
+    padding: 5px;
+    margin: 15px 0 15px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.main .votes {
+    margin-top: 20px;
+    padding: 20px 20px 20px;
+    border-radius: 10px;
+    border: 1px #BDBDBD solid;
+
+}
+
+.main .votes .votes-header .votes-title {
+    color: #333333;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.main .votes .votes-header .votes-count {
+    margin-left: 10px;
+    width: 70px;
+    padding: 5px 13px;
+    background: #BDBDBD;
+    color: #F7F7F7;
+    border-radius: 30px;
+    margin-bottom: 10px;
+
+}
+
+.user-vote img {
+    width: 35px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+}
+
+.vote-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 10px;
+    background: #F7F7F7;
+}
+
+.vote-item img {
+    margin-right: 10px;
+}
+
+.vote-item * {
+    width: 150px;
+}

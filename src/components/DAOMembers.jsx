@@ -14,7 +14,7 @@ const DAOMembers = ({members}) => {
                             <img src={member.avatar}/>
                         </div>
                         <div className="dao-member-name">{member.name}</div>
-                        <div className="dao-member-email">{member.email}</div>
+                        <div className="dao-member-address">{member.address}</div>
                     </div>
                 )
             }
