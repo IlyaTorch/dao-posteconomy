@@ -12,17 +12,24 @@ contract DAO {
         bool executed;
         uint256 amount;
         address payable beneficiary;
+        string user_avatar;
+        string start;
+        string end;
     }
     struct VotedStruct {
         address voter;
         uint256 timestamp;
         bool choice;
+        string username;
+        string user_avatar;
+        uint256 sum;
     }
 
     string public name;
     string public description;
     address[] public members;
     uint256 public membersCount;
+    string public avatar;
 
     mapping(uint256 => Proposal) public proposals;
     uint256 public proposalCount;
@@ -45,7 +52,10 @@ contract DAO {
         address _initiator,
         string memory _title,
         string memory _description,
-        address beneficiary
+        address beneficiary,
+        string memory _user_avatar,
+        string memory _start,
+        string memory _end
     ) public {
         proposals[proposalCount] = Proposal(
             proposalCount,
@@ -56,7 +66,10 @@ contract DAO {
             0,
             false,
             0,
-            payable(beneficiary)
+            payable(beneficiary),
+            _user_avatar,
+            _start,
+            _end
         );
         proposalCount++;
     }
@@ -72,7 +85,7 @@ contract DAO {
         return daoProposals;
     }
 
-    function vote(uint256 _proposalId, bool choice) payable public {
+    function vote(uint256 _proposalId, bool choice, string memory username, string memory user_avatar) payable public {
         require(isMember(msg.sender), "Only members can vote");
         Proposal storage proposal = proposals[_proposalId];
         require(!proposal.executed, "Proposal has already been executed");
@@ -93,7 +106,10 @@ contract DAO {
             VotedStruct(
                 msg.sender,
                 block.timestamp,
-                choice
+                choice,
+                username,
+                user_avatar,
+                msg.value
             )
         );
     }
@@ -113,6 +129,25 @@ contract DAO {
             }
         }
         return false;
+    }
+
+    function getProposalDetails(uint256 _proposalId)
+        public view returns (string memory, string memory, uint256, uint256, bool, uint256, address, string memory, string memory, string memory, VotedStruct[] memory) {
+        Proposal storage proposal = proposals[_proposalId];
+        VotedStruct[] memory votes = votedOn[_proposalId];
+        return (
+            proposal.title,
+            proposal.description,
+            proposal.votesFor,
+            proposal.votesAgainst,
+            proposal.executed,
+            proposal.amount,
+            proposal.initiator,
+            proposal.user_avatar,
+            proposal.start,
+            proposal.end,
+            votes
+        );
     }
 
 //    function executeProposal(uint256 _proposalId) public {

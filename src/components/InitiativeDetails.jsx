@@ -1,12 +1,18 @@
 import "../styles/InitiativeDetails.css";
+import {useState, useEffect} from "react";
+import {useParams} from "react-router-dom";
+import {getDAO, getProposalDetails, listVoters, voteOnProposal} from "../PosteconomyV2";
+import {toast} from "react-toastify";
+import {generateUsername} from "unique-username-generator";
+import {prepareMembers} from "../utils";
 
 
 const InitiativeDetails = () => {
-    const data = {
+    const {addr, id} = useParams();
+    const default_data = {
         "title": "Proposal for New Project",
         "dao_avatar": "https://robohash.org/1?set=set2&size=180x180",
         "status": "Active",
-        "dao_title": "Blockchain Innovators DAO",
         "description": "This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.",
         "votes_count": 120,
         "votes": [
@@ -28,7 +34,30 @@ const InitiativeDetails = () => {
         "start": "2022-01-01T00:00:00Z",
         "end": "2022-01-31T00:00:00Z"
     }
-    const {title, dao_avatar, status, dao_title, description, votes_count, votes, author_name, author_avatar, start, end} = data
+    const [data, setData] = useState(default_data)
+    const [dao_title, setTitle] = useState("")
+    useEffect(() => {
+        getProposalDetails(addr, parseInt(id)).then(
+            res => setData({...data, ...res})
+        )
+        getDAO(addr).then(res => setTitle(res[0]));
+    }, []);
+    const {title, dao_avatar, status, description, votes_count, votes, author_name, author_avatar, start, end} = data
+    const onVote = (amount) => {
+        voteOnProposal(
+            addr,
+            parseInt(id),
+            amount,
+            generateUsername('',1, 10),
+            "https://robohash.org/190?set=set2&size=180x180"
+        ).then((res) => {
+            if (!!!res.code) {
+                toast.success('Voted successfully!')
+                window.location.reload()
+            }
+        })
+    }
+
 
     return (
         <div className="initiative-page">
@@ -54,8 +83,8 @@ const InitiativeDetails = () => {
                 <div className="vote">
                     <h2>Vote up or down</h2>
                     <hr/>
-                    <div>Vote UP (3 ETH)</div>
-                    <div>Vote Down</div>
+                    <div onClick={() => onVote(3)}>Vote UP (3 ETH)</div>
+                    <div onClick={() => onVote(0)}>Vote Down</div>
                 </div>
                 <div className="votes">
                     <div className="votes-header">

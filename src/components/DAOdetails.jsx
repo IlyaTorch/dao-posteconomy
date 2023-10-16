@@ -17,6 +17,10 @@ const DAOdetails = ({daoId, daoAddr}) => {
     const [members, setMembers] = useState([])
     const [proposals, setProposals] = useState([])
     const menuItem = getGlobalState('daoDetailsMenuItem')
+    let d = new Date();
+    const start = d.toString();
+    d.setDate(d.getDate() + 2);
+    const end = d.toString()
 
     useEffect(() => {
         getDAO(daoAddr).then(res => {
@@ -31,9 +35,6 @@ const DAOdetails = ({daoId, daoAddr}) => {
 
     const onCreateProposal = () => {
         setGlobalState('createProposalModal', '')
-        // const title = "test-title";
-        // const description = "test-description";
-        createDAOproposal(daoAddr, title, description).then(res => console.log(res))
     }
 
     return (
@@ -49,7 +50,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
                 {
                     menuItem === 'initiatives' && <div>
                         {/*<span className="dao-page-initiatives-header">DAO Initiatives</span>*/}
-                        <DAOProposals data={proposals}/>
+                        {/*<DAOProposals data={proposals}/>*/}
                         <DAOInitiatives initiatives={[...proposals
                             // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
                             // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
@@ -58,7 +59,12 @@ const DAOdetails = ({daoId, daoAddr}) => {
                             // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
                             // {title: 'Organize Book Club', creator_avatar: 'https://robohash.org/0?set=set2&size=180x180', creator: '0xABF5459D9531622D7482A66bE04F740d8B6fA48c', status: 'active', description: 'We are forced to start from the fact that the boundary of personnel training requires the analysis of thoughtful reasoning. Taking into account key behavioral scenarios, the innovative path we have chosen...', voted: 50},
                         ]}/>
-                        <CreateProposal daoAddr={daoAddr}/>
+                        <CreateProposal
+                            daoAddr={daoAddr}
+                            user_avatar='https://robohash.org/25?set=set2&size=180x180'
+                            start={start}
+                            end={end}
+                        />
                         <button onClick={onCreateProposal}>Create Proposal</button>
                     </div>
                 }
