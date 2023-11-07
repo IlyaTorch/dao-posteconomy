@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {getDAO, isMember, joinDAO} from "../PosteconomyV2";
+import {fetchDAO, getDAO, isMember, joinDAO} from "../PosteconomyV2";
 import {useGlobalState} from "../store";
 import "../styles/DAOitem.css";
 import {Link} from "react-router-dom";
@@ -8,10 +8,19 @@ const DAOitem = ({id, addr}) => {
     const [acc] = useGlobalState('connectedAccount');
     const [daoMember, setDaoMember] = useState(false)
     const [daoName, setDaoName] = useState('')
+    const [daoAvatar, setDaoAvatar] = useState('')
 
     useEffect(() => {
-        isMember(addr, acc).then(res => setDaoMember(res));
-        getDAO(addr).then(res => setDaoName(res[0]));
+        const loadData = async () => {
+            const is_member = await isMember(addr, acc)
+            const dao_details = await getDAO(addr)
+            const dao_additional_details = await fetchDAO(addr)
+
+            setDaoMember(is_member)
+            setDaoName(dao_details.title)
+            setDaoAvatar(dao_additional_details.dao_avatar)
+        }
+        loadData().catch(console.log)
     }, [addr]);
 
     const onJoinDAO = () => {
@@ -24,7 +33,7 @@ const DAOitem = ({id, addr}) => {
                 to={`/dao/${addr}`}
             >
                 <img
-                    src={`https://robohash.org/${id}?set=set2&size=180x180`}
+                    src={daoAvatar}
                     alt={addr}
                 />
             </Link>

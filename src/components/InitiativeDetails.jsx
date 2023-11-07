@@ -1,46 +1,35 @@
 import "../styles/InitiativeDetails.css";
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
-import {getDAO, getProposalDetails, listVoters, voteOnProposal} from "../PosteconomyV2";
+import {fetchDAO, fetchUser, getDAO, getProposalDetails, listVoters, voteOnProposal} from "../PosteconomyV2";
 import {toast} from "react-toastify";
 import {generateUsername} from "unique-username-generator";
-import {prepareMembers} from "../utils";
+import ContractEditor from "./ContractEditor";
 
 
 const InitiativeDetails = () => {
     const {addr, id} = useParams();
-    const default_data = {
-        "title": "Proposal for New Project",
-        "dao_avatar": "https://robohash.org/1?set=set2&size=180x180",
-        "status": "Active",
-        "description": "This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.This proposal aims to initiate a new project that will focus on developing a decentralized finance platform.",
-        "votes_count": 120,
-        "votes": [
-            {
-                "username": "John Doe",
-                "user_avatar": "https://robohash.org/1?set=set2&size=180x180",
-                "vote": "Voted Up",
-                "sum": "3 ETH"
-            },
-            {
-                "username": "Jane Smith",
-                "user_avatar": "https://robohash.org/1?set=set2&size=180x180",
-                "vote": "Voted Down",
-                "sum": "0"
-            }
-        ],
-        "author_name": "Alice Johnson",
-        "author_avatar": "https://robohash.org/1?set=set2&size=180x180",
-        "start": "2022-01-01T00:00:00Z",
-        "end": "2022-01-31T00:00:00Z"
-    }
+    const default_data = {status: ""}
     const [data, setData] = useState(default_data)
-    const [dao_title, setTitle] = useState("")
+    const [dao_title, setTitle] = useState(undefined)
     useEffect(() => {
-        getProposalDetails(addr, parseInt(id)).then(
-            res => setData({...data, ...res})
-        )
-        getDAO(addr).then(res => setTitle(res[0]));
+        const loadData = async () => {
+            const proposal_details = await getProposalDetails(addr, parseInt(id))
+            const author = await fetchUser(proposal_details.author_addr)
+            proposal_details.author_name = author.username
+            proposal_details.author_avatar = author.avatar_url
+            for (let i = 0; i < proposal_details.votes.length || 0; i++) {
+                const vote = proposal_details.votes[i]
+                const u = await fetchUser(vote.user_addr)
+                vote.user_avatar = u.avatar_url
+            }
+            const dao_details = await getDAO(addr)
+            const dao_additional_details = await fetchDAO(addr)
+
+            setTitle(dao_details.title)
+            setData({...data, ...proposal_details, dao_avatar: dao_additional_details.dao_avatar})
+        }
+        loadData().catch(console.error)
     }, []);
     const {title, dao_avatar, status, description, votes_count, votes, author_name, author_avatar, start, end} = data
     const onVote = (amount) => {
@@ -64,7 +53,7 @@ const InitiativeDetails = () => {
             <div className="main">
                 <div className="header">{title}</div>
                 <div className="short">
-                    <div className="status">{status}</div>
+                    <div className={"status " + (status.toLowerCase() === "executed" ? "executed" : "")}>{status}</div>
                     <div>
                         <img src={dao_avatar} alt=""/>
                         <span>{dao_title}</span>
@@ -92,7 +81,7 @@ const InitiativeDetails = () => {
                         <span className="votes-count">{votes_count}</span>
                     </div>
                     {
-                    votes.map(vote => (
+                    votes?.map(vote => (
                         <div className="vote-item">
                             <div className="user-vote">
                                 <img src={vote.user_avatar} alt=""/>
@@ -103,6 +92,15 @@ const InitiativeDetails = () => {
                         </div>
                     ))
                 }</div>
+                <div>
+                    <div>
+                        <h2>Finalize the Initiative</h2>
+                        {
+                            data.title && <ContractEditor title={data.title} description={data.description}/>
+                        }
+                    </div>
+                </div>
+
             </div>
             <div className="sidebar">
                 <div className="info">

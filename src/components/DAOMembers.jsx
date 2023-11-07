@@ -11,10 +11,10 @@ const DAOMembers = ({members}) => {
                 members.map(member =>
                     <div className="dao-member">
                         <div className="dao-member-avatar">
-                            <img src={member.avatar}/>
+                            <img src={member.avatar_url}/>
                         </div>
-                        <div className="dao-member-name">{member.name}</div>
-                        <div className="dao-member-address">{member.address}</div>
+                        <div className="dao-member-name">{member.username}</div>
+                        <div className="dao-member-address">{`${member.address.substring(0,15)}...`}</div>
                     </div>
                 )
             }

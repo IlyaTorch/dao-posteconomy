@@ -12,7 +12,6 @@ contract DAO {
         bool executed;
         uint256 amount;
         address payable beneficiary;
-        string user_avatar;
         string start;
         string end;
     }
@@ -21,12 +20,13 @@ contract DAO {
         uint256 timestamp;
         bool choice;
         string username;
-        string user_avatar;
+        address user_addr;
         uint256 sum;
     }
 
     string public name;
     string public description;
+    string public scope;
     address[] public members;
     uint256 public membersCount;
     string public avatar;
@@ -36,9 +36,10 @@ contract DAO {
     mapping(address => uint256[]) private stakeholderVotes;
     mapping(uint256 => VotedStruct[]) private votedOn;
 
-    constructor(string memory _name, string memory _description, address _initiator) {
+    constructor(string memory _name, string memory _description, string memory _scope, address _initiator) {
         name = _name;
         description = _description;
+        scope = _scope;
         members.push(_initiator);
         membersCount++;
     }
@@ -53,9 +54,9 @@ contract DAO {
         string memory _title,
         string memory _description,
         address beneficiary,
-        string memory _user_avatar,
         string memory _start,
-        string memory _end
+        string memory _end,
+        bool _executed
     ) public {
         proposals[proposalCount] = Proposal(
             proposalCount,
@@ -64,10 +65,9 @@ contract DAO {
             _description,
             0,
             0,
-            false,
+            _executed,
             0,
             payable(beneficiary),
-            _user_avatar,
             _start,
             _end
         );
@@ -85,10 +85,8 @@ contract DAO {
         return daoProposals;
     }
 
-    function vote(uint256 _proposalId, bool choice, string memory username, string memory user_avatar) payable public {
-        require(isMember(msg.sender), "Only members can vote");
+    function vote(uint256 _proposalId, bool choice, string memory username, address user_addr) payable public {
         Proposal storage proposal = proposals[_proposalId];
-        require(!proposal.executed, "Proposal has already been executed");
         uint256[] memory tempVotes = stakeholderVotes[msg.sender];
         for (uint256 v = 0; v < tempVotes.length; v++) {
             if (proposal.id == tempVotes[v])
@@ -108,8 +106,33 @@ contract DAO {
                 block.timestamp,
                 choice,
                 username,
-                user_avatar,
+                user_addr,
                 msg.value
+            )
+        );
+    }
+
+    function voteFake(uint256 _proposalId, bool choice, string memory username, address user_addr) payable public {
+        Proposal storage proposal = proposals[_proposalId];
+        uint256 amount;
+
+        if (choice) {
+            proposal.votesFor++;
+            amount = 3e18;
+            proposal.amount += amount;
+        } else {
+            proposal.votesAgainst++;
+            amount = 0;
+        }
+        stakeholderVotes[user_addr].push(proposal.id);
+        votedOn[proposal.id].push(
+            VotedStruct(
+                user_addr,
+                block.timestamp,
+                choice,
+                username,
+                user_addr,
+                amount
             )
         );
     }
@@ -132,7 +155,7 @@ contract DAO {
     }
 
     function getProposalDetails(uint256 _proposalId)
-        public view returns (string memory, string memory, uint256, uint256, bool, uint256, address, string memory, string memory, string memory, VotedStruct[] memory) {
+        public view returns (string memory, string memory, uint256, uint256, bool, uint256, address, string memory, string memory, VotedStruct[] memory) {
         Proposal storage proposal = proposals[_proposalId];
         VotedStruct[] memory votes = votedOn[_proposalId];
         return (
@@ -143,7 +166,6 @@ contract DAO {
             proposal.executed,
             proposal.amount,
             proposal.initiator,
-            proposal.user_avatar,
             proposal.start,
             proposal.end,
             votes

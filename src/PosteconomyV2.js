@@ -6,6 +6,10 @@ import {proposalArrayToObj, proposalDetailToObj} from "./utils";
 
 
 const {ethereum} = window
+const BACKEND_URL = "http://0.0.0.0:8000"
+const DEFAULT_ROLE = "student"
+const DEFAULT_USERNAME = "Ilya Torch"
+const DEFAULT_AVATAR_URL = "https://avatars.githubusercontent.com/u/45897493?v=4"
 
 const connectWallet = async () => {
     try {
@@ -55,7 +59,15 @@ const getDAO = async (daoAddr) => {
     const contract = getGlobalState('contract')
 
     try {
-        return await contract.methods.getDAO(daoAddr).call();
+        const resp = await contract.methods.getDAO(daoAddr).call();
+        return {
+            dao_addr: resp[0],
+            title: resp[1],
+            description: resp[2],
+            scope: resp[3],
+            members_count: resp[4],
+            members_list: resp[5]
+        }
     } catch (error) {
         console.log('getDAO', error)
     }
@@ -65,14 +77,16 @@ const getAllDAOs = async () => {
     const contract = getGlobalState('contract')
 
     try {
-        return await contract.methods.getAllDAOs().call();
+        const data = await contract.methods.getAllDAOs().call();
+        console.log(data)
+        return data
     } catch (error) {
         console.log('getAllDAOs', error)
     }
 };
 
 
-const createDAOproposal = async (contractAddr, title, description, beneficiaryAddr, user_avatar, start, end) => {
+const createDAOproposal = async (contractAddr, title, description, beneficiaryAddr, start, end) => {
     try {
         const account = getGlobalState('connectedAccount');
         const contractDAO = new web3.eth.Contract(
@@ -81,7 +95,7 @@ const createDAOproposal = async (contractAddr, title, description, beneficiaryAd
         )
 
         await contractDAO.methods
-            .createProposal(account, title, description, beneficiaryAddr, user_avatar, start, end)
+            .createProposal(account, title, description, beneficiaryAddr, start, end, false)
             .send({from: account})
         location.reload();
     } catch (error) {
@@ -102,7 +116,7 @@ const getDAOproposals = async (daoAddr) => {
         const daoProposals = [];
 
         for (let i = 0; i < proposals.length; i++) {
-            daoProposals.push(proposalArrayToObj(proposals[i]))
+            daoProposals.push(await proposalArrayToObj(proposals[i]))
         }
         setGlobalState('proposals', daoProposals);
         return daoProposals;
@@ -190,6 +204,7 @@ const loadWeb3 = async () => {
             await createInitialData(contract)
 
             const daos = await contract.methods.getAllDAOs().call()
+            console.log(daos)
             setGlobalState('daos', daos)
         } else {
             window.alert('ManagerDAOs contract not deployed to detected network.')
@@ -204,35 +219,49 @@ const loadWeb3 = async () => {
 
 
 const createInitialData = async (contract) => {
-    const DAO_NAMES = [
-        {name: 'developers', description: 'Developer DAO is a community of thousands of web3 builders creating a better internet. Join us and create the future.'},
-        {name: 'qa', description: 'Quality Assurance DAO (QA-DAO) is an ongoing open source project that provides support for and is funded by the Cardano Project Catalyst Community.'},
-        {name: 'recruiters', description: 'Recruitment for QA testers of all types. Our QA recruiters can find your perfect match for any level of experience or skill set requirements. Whether you need a manual or automated tester, employee (W2) or contractor (1099), website, software, or iOS/Android mobile app testing, we’re here to help you and your Engineering team find the right fit.'},
-        {name: 'finmaker', description: 'Dai is a stable, decentralized currency that does not discriminate. Any individual or business can realize the advantages of digital money.'},
-        {name: 'Mexico Trip', description: 'DAO of Mexico Trip 14 jul 2022'},
-    ]
-
-    let existing_dao_addrs = await contract.methods.getAllDAOs().call() || []
-    let existing_dao_names = []
-    for (let i = 0; i < existing_dao_addrs.length; i++) {
-        const dao = await contract.methods.getDAO(existing_dao_addrs[i]).call();
-        existing_dao_names.push(dao[0])
-    }
-    const account = getGlobalState('connectedAccount')
-
-    for (let i = 0; i < DAO_NAMES.length; i++) {
-        if (!existing_dao_names.includes(DAO_NAMES[i].name)) {
-            await contract.methods.createDAO(
-                DAO_NAMES[i].name,
-                DAO_NAMES[i].description
-            ).send({from: account});
-            existing_dao_addrs = await contract.methods.getAllDAOs().call() || []
-            const last = existing_dao_addrs[existing_dao_addrs.length -1]
-            await contract.methods.addDefaultMembersToDAO(last).send({from: account});
-        }
-    }
+    // const account = getGlobalState('connectedAccount')
+    // await contract.methods.addDefaultDAOs().send({from: account});
+    // const daos = await getAllDAOs()
+    // for (let i = 0; i < daos.length; i++) {
+    //     const dao = await getDAO(daos[i])
+    //     await fetchCreateDao(dao)
+    // }
+    // await fetchCreateUser({
+    //     address: account,
+    //     role: DEFAULT_ROLE,
+    //     username: DEFAULT_USERNAME,
+    //     avatar_url: DEFAULT_AVATAR_URL,
+    // })
 }
 
+const fetchCreateUser = async (user) => {
+    const resp = await fetch(`${BACKEND_URL}/create/user`, {
+        method: "POST",
+        body: JSON.stringify(user)
+    })
+    return await resp.json()
+}
+
+
+const fetchCreateDao = async (dao) => {
+    const resp = await fetch(`${BACKEND_URL}/create/dao`, {
+        method: "POST",
+        body: JSON.stringify(dao)
+    })
+    return await resp.json()
+}
+
+
+const fetchUser = async (addr) => {
+    const resp = await fetch(`${BACKEND_URL}/users/${addr}`)
+    return await resp.json()
+}
+
+
+const fetchDAO = async (addr) => {
+    const resp = await fetch(`${BACKEND_URL}/daos/${addr}`)
+    return await resp.json()
+}
 
 export {
     loadWeb3,
@@ -249,4 +278,6 @@ export {
     listVoters,
     createInitialData,
     getProposalDetails,
+    fetchUser,
+    fetchDAO,
 }

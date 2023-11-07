@@ -7,12 +7,13 @@ import './DAO.sol';
 contract ManagerDAOs {
     mapping(address => DAO) public daos;
     address[] daoAddresses;
+    bool daoCreated;
 
     event DAOCreated(address dao, string name);
     event DAOJoined(address dao, address member);
 
-    function createDAO(string memory _name, string memory _description) public {
-        DAO newDAO = new DAO(_name, _description, msg.sender);
+    function createDAO(string memory _name, string memory _description, string memory _scope) public {
+        DAO newDAO = new DAO(_name, _description, _scope, msg.sender);
         daos[address(newDAO)] = newDAO;
         daoAddresses.push(address(newDAO));
 
@@ -50,6 +51,47 @@ contract ManagerDAOs {
         }
     }
 
+    function addDefaultDAOs() public {
+        if (daoCreated) {
+            return;
+        }
+        daoCreated = true;
+
+        DAO newDAO = new DAO(
+            "Browser programming language",
+            "It is necessary to create a complete tool for creating web applications that will allow developers to manage the browser and its interface. This programming language must provide the ability to interact with a web server, create animations, games, maps and other web services. As a result of development, users will be able to use this language to create unique and functional web applications.",
+            "it",
+            0xCFDDe8452921D5C60E3Fda3A29f2Cb9437f509D6
+        );
+        daos[address(newDAO)] = newDAO;
+        daoAddresses.push(address(newDAO));
+        newDAO.createProposal(
+            0xCFDDe8452921D5C60E3Fda3A29f2Cb9437f509D6,
+            "Browser programming language",
+            "It is necessary to create a complete tool for creating web applications that will allow developers to manage the browser and its interface. This programming language must provide the ability to interact with a web server, create animations, games, maps and other web services. As a result of development, users will be able to use this language to create unique and functional web applications.",
+            0xCFDDe8452921D5C60E3Fda3A29f2Cb9437f509D6,
+            "2023-10-25",
+            "2023-10-25",
+            true
+        );
+        newDAO.voteFake(0, false, "Maxim Zamir", 0xD87Fea2184D952eEEf827A190Fba9D7F2F09A638);
+        newDAO.voteFake(0, false, "Anton Cheplukov", 0x012493BE86AC0107723b1e1A0aCc087A42236ccA);
+        newDAO.voteFake(0, false, "Aliaksandr Askerka", 0x3D30c9631Fce0B4ebF71CcFAaa2e93597949A448);
+        newDAO.voteFake(0, false, "Felix Lipov", 0x6620bcaCC17760eE0C81b1F440e8801EF8e65aEF);
+        newDAO.voteFake(0, false, "Anastasiya Konoplina", 0x68Bca109B3B6959cbc504B3cd07a81f11a9285Ec);
+
+        address[5] memory accounts = [
+            0xD87Fea2184D952eEEf827A190Fba9D7F2F09A638,
+            0x012493BE86AC0107723b1e1A0aCc087A42236ccA,
+            0x3D30c9631Fce0B4ebF71CcFAaa2e93597949A448,
+            0x6620bcaCC17760eE0C81b1F440e8801EF8e65aEF,
+            0x68Bca109B3B6959cbc504B3cd07a81f11a9285Ec
+        ];
+        for (uint256 i = 0; i < 5; i++) {
+            address _account = accounts[i];
+            newDAO.addMember(_account);
+        }
+    }
 
     function isMember(address _dao, address _member) public view returns (bool) {
         DAO dao = daos[_dao];
@@ -61,7 +103,7 @@ contract ManagerDAOs {
         return false;
     }
 
-    function getDAO(address _dao) public view returns (string memory, string memory, uint256, address[] memory) {
+    function getDAO(address _dao) public view returns (address, string memory, string memory, string memory, uint256, address[] memory) {
         DAO dao = daos[_dao];
         address[] memory daoMemers = new address[](dao.membersCount());
 
@@ -69,7 +111,7 @@ contract ManagerDAOs {
             daoMemers[i] = dao.members(i);
         }
 
-        return (dao.name(), dao.description(), dao.membersCount(), daoMemers);
+        return (_dao, dao.name(), dao.description(), dao.scope(), dao.membersCount(), daoMemers);
     }
 
     function getAllDAOs() public view returns (address[] memory) {

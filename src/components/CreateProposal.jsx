@@ -16,7 +16,7 @@ const CreateProposal = ({daoAddr, user_avatar, start, end}) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     // if (!title || !description || !beneficiary || !amount || !initiator) return
-    createDAOproposal(daoAddr, title, description, beneficiary, user_avatar, start, end).then(res => {
+    createDAOproposal(daoAddr, title, description, beneficiary, start, end).then(res => {
       toast.success('Proposal created, reloading in progress...')
       closeModal()
       // window.location.reload()

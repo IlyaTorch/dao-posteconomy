@@ -14,8 +14,8 @@ const DAOAbout = ({description, administrators}) => {
                 <div>{
                     administrators.map(admin => (
                         <div className="dao-about-admin">
-                            <img src={admin.avatar}/>
-                            <span>{admin.name}</span>
+                            <img src={admin.avatar_url}/>
+                            <span>{admin.username}</span>
                         </div>
                     ))
                 }</div>

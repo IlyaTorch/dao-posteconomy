@@ -76,7 +76,7 @@
 }
 
 .main .short .status {
-    width: 70px;
+    width: 95px;
     padding: 5px 13px;
     background: #BDBDBD;
     color: #F7F7F7;
@@ -84,8 +84,13 @@
     margin-bottom: 10px;
 }
 
+.main .short .executed {
+    background: #000000;
+}
+
 .main .short img {
-    width: 35px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     border: 0.5px solid #000;
     display: inline;

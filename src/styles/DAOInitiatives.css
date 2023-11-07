@@ -50,9 +50,13 @@
 }
 
 .dao-initiative-status {
-    width: 70px;
+    width: 95px;
     padding: 5px 13px;
     background: #BDBDBD;
     color: #F7F7F7;
     border-radius: 30px;
+}
+
+.executed {
+    background: #000000;
 }
