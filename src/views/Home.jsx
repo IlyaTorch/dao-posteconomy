@@ -6,6 +6,7 @@ import Proposals from '../components/Proposals'
 import DAOlist from "../components/DAOlist";
 import DAOcreate from "../components/DAOcreate";
 import "../styles/Home.css";
+import SearchBar from "../components/SearchBar";
 
 const Home = () => {
     return (
@@ -13,11 +14,11 @@ const Home = () => {
             <Header/>
             <div className="container">
                 <SidebarPanel/>
-                <DAOlist/>
+                <div className="main-content">
+                    <SearchBar/>
+                    <DAOlist/>
+                </div>
             </div>
-            {/*<Proposals/>*/}
-            {/*<CreateProposal/>*/}
-            {/* <ChatLogin /> */}
             <br/>
             <br/>
             <br/>

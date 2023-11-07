@@ -1,18 +1,25 @@
 import { createGlobalState } from 'react-hooks-global-state'
 import moment from 'moment'
 
+const DEFAULT_TAGS = [
+    "it", "programming", "education", "travel", "sport", "europe", "web3"
+]
+
 const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   createProposalModal: 'scale-0',
   loginModal: 'scale-0',
   connectedAccount: '',
   contract: null,
+  dao_addresses: [],
   daos: [],
+  filtered_daos: [],
   currentUser: null,
   isStakeholder: false,
   balance: 0,
   mybalance: 0,
   proposals: [],
   daoDetailsMenuItem: 'members',
+  tags: DEFAULT_TAGS,
 })
 
 const truncate = (text, startChars, endChars, maxLength) => {
@@ -42,4 +49,5 @@ export {
   getGlobalState,
   truncate,
   daysRemaining,
+  DEFAULT_TAGS,
 }

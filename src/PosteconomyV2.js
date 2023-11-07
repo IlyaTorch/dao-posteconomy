@@ -203,9 +203,16 @@ const loadWeb3 = async () => {
 
             await createInitialData(contract)
 
-            const daos = await contract.methods.getAllDAOs().call()
-            console.log(daos)
+            const dao_addresses = await contract.methods.getAllDAOs().call()
+            setGlobalState('dao_addresses', dao_addresses)
+            const daos = []
+            for (let i = 0; i < dao_addresses.length; i++) {
+                const dao_details = await getDAO(dao_addresses[i])
+                const dao_additional_details = await fetchDAO(dao_addresses[i])
+                daos.push({...dao_details, ...dao_additional_details})
+            }
             setGlobalState('daos', daos)
+            setGlobalState('filtered_daos', daos)
         } else {
             window.alert('ManagerDAOs contract not deployed to detected network.')
         }
@@ -219,19 +226,19 @@ const loadWeb3 = async () => {
 
 
 const createInitialData = async (contract) => {
-    // const account = getGlobalState('connectedAccount')
+    const account = getGlobalState('connectedAccount')
     // await contract.methods.addDefaultDAOs().send({from: account});
-    // const daos = await getAllDAOs()
-    // for (let i = 0; i < daos.length; i++) {
-    //     const dao = await getDAO(daos[i])
-    //     await fetchCreateDao(dao)
-    // }
-    // await fetchCreateUser({
-    //     address: account,
-    //     role: DEFAULT_ROLE,
-    //     username: DEFAULT_USERNAME,
-    //     avatar_url: DEFAULT_AVATAR_URL,
-    // })
+    const daos = await getAllDAOs()
+    for (let i = 0; i < daos.length; i++) {
+        const dao = await getDAO(daos[i])
+        await fetchCreateDao(dao)
+    }
+    await fetchCreateUser({
+        address: account,
+        role: DEFAULT_ROLE,
+        username: DEFAULT_USERNAME,
+        avatar_url: DEFAULT_AVATAR_URL,
+    })
 }
 
 const fetchCreateUser = async (user) => {

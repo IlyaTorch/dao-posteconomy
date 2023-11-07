@@ -1,0 +1,35 @@
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-input {
+  width: 900px;
+  padding: 12px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+}
+
+.tag-list {
+  display: flex;
+  margin-top: 12px;
+}
+
+.tag-button {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  background: #eee;
+  font-size: 14px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.tag-button:hover {
+  background: #ddd;
+}
+
+.tag-button.selected {
+  background: #7380FF;
+}

@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 const DAOitem = ({id, addr}) => {
     const [acc] = useGlobalState('connectedAccount');
     const [daoMember, setDaoMember] = useState(false)
+    const [daoTags, setDaoTags] = useState([])
     const [daoName, setDaoName] = useState('')
     const [daoAvatar, setDaoAvatar] = useState('')
 
@@ -18,6 +19,7 @@ const DAOitem = ({id, addr}) => {
 
             setDaoMember(is_member)
             setDaoName(dao_details.title)
+            setDaoTags(dao_additional_details.tags)
             setDaoAvatar(dao_additional_details.dao_avatar)
         }
         loadData().catch(console.log)
@@ -41,7 +43,11 @@ const DAOitem = ({id, addr}) => {
             <span className="name">
                 {daoName}
             </span>
-            <br/>
+            <div className="tags">
+                {daoTags.map(tag => (
+                    <><span className="tag">#{tag}&nbsp;</span><br/></>
+                    ))}
+            </div>
             {daoMember ?
                 <button className='button-member'>Member</button> :
                 <button className='button-join' onClick={onJoinDAO}>Join</button>}

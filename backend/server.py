@@ -123,7 +123,9 @@ async def create_user(request: Request) -> dict:
 @app.post("/create/dao")
 async def create_dao(request: Request):
     dao = await request.json()
-    tags = ['ed1'] if dao['scope'] == 'education' else []
+    tags = [dao['scope'], ]
+    if dao['title'].lower() == 'browser programming language':
+        tags.extend(['browser', 'programming'])
     d = DAO(
         title=dao['title'],
         dao_addr=dao['dao_addr'],
