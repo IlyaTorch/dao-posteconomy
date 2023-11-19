@@ -1,17 +1,33 @@
-.dao-members-container {
+.dao-members {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 750px;
+    width: 773px;
+    margin-top: 20px;
+    padding: 20px 20px 20px;
+    border-radius: 10px;
+    border: 1px #BDBDBD solid;
+
 }
 
-.dao-members-header {
-    color: #4F4F4F;
-    font-size: 28px;
+.members-header .members-title {
+    color: #333333;
+    font-size: 24px;
     font-weight: bold;
+    line-height: 22px;
 }
 
-.dao-members-list {
+.members-header .members-count {
+    margin-left: 10px;
+    width: 70px;
+    padding: 5px 13px;
+    background: #BDBDBD;
+    color: #F7F7F7;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}
+
+.dao-members .list {
     width: 750px;
     display: flex;
     gap: 20px;

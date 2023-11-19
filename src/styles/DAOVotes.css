@@ -1,0 +1,72 @@
+.dao-votes {
+    width: 773px;
+}
+
+.dao-votes .vote {
+    margin-top: 20px;
+    border: 1px #BDBDBD solid;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.dao-votes .vote h2 {
+    color: #333333;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.dao-votes .vote div {
+    border-radius: 50px;
+    border: 1px #BDBDBD solid;
+    padding: 5px;
+    margin: 15px 0 15px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dao-votes .votes {
+    margin-top: 20px;
+    padding: 20px 20px 20px;
+    border-radius: 10px;
+    border: 1px #BDBDBD solid;
+}
+
+.dao-votes .votes .votes-header .votes-title {
+    color: #333333;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.dao-votes .votes .votes-header .votes-count {
+    margin-left: 10px;
+    width: 70px;
+    padding: 5px 13px;
+    background: #BDBDBD;
+    color: #F7F7F7;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}
+
+.user-vote img {
+    width: 35px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+}
+
+.vote-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 10px;
+    background: #F7F7F7;
+}
+
+.vote-item img {
+    margin-right: 10px;
+}
+
+.vote-item * {
+    width: 150px;
+}

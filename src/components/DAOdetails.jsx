@@ -1,13 +1,12 @@
-import { fetchDAO, fetchUser, getDAO, getDAOproposals } from "../PosteconomyV2";
-import {useEffect, useState} from "react";
+import { fetchUser, getDAO, getDAOproposals } from "../PosteconomyV2";
+import React, {useEffect, useState} from "react";
 import DAOitem from "../components/DAOitem";
 import "../styles/DAOdetails.css";
-import CreateProposal from "./CreateProposal";
-import {getGlobalState, setGlobalState} from "../store";
-import DAOMenu from "./DAOMenu";
+import {setGlobalState} from "../store";
 import DAOMembers from "./DAOMembers";
-import DAOAbout from "./DAOAbout";
-import DAOInitiatives from "./DAOInitiatives";
+import DAOMain from "./DAOMain";
+import DAOVotes from "./DAOVotes";
+import DAOAgreement from "./DAOAgreement";
 
 
 const DAOdetails = ({daoId, daoAddr}) => {
@@ -15,7 +14,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
     const [description, setDescription] = useState('')
     const [members, setMembers] = useState([])
     const [proposals, setProposals] = useState([])
-    const menuItem = getGlobalState('daoDetailsMenuItem')
+    const [menuItem, setMenuItem] = useState('details')
     let d = new Date();
     const start = d.toString();
     d.setDate(d.getDate() + 2);
@@ -24,9 +23,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
     useEffect(() => {
         const loadData = async () => {
             const dao_details = await getDAO(daoAddr)
-            console.log(dao_details)
             const proposals = await getDAOproposals(daoAddr)
-            console.log(proposals)
             const members = []
             for (let i = 0; i < dao_details.members_list.length; i++) {
                 members.push(await fetchUser(dao_details.members_list[i]))
@@ -48,30 +45,55 @@ const DAOdetails = ({daoId, daoAddr}) => {
         <div className="dao-page">
             <div className="dao-page-short-info">
                 <DAOitem id={daoId} addr={daoAddr} name={name}/>
-                <DAOMenu/>
+                <div className="dao-menu">
+                    <div
+                        className={"dao-menu-item " + (menuItem === 'details' ? 'item-active' : '')}
+                        onClick={() => {
+                        setMenuItem( 'details')
+                    }}>Details</div>
+                    <div
+                        className={"dao-menu-item " + (menuItem === 'members' ? 'item-active' : '')}
+                        onClick={() => {
+                        setMenuItem( 'members')
+                    }}>Members</div>
+                    <div
+                        className={"dao-menu-item " + (menuItem === 'votes' ? 'item-active' : '')}
+                        onClick={() => {
+                            setMenuItem( 'votes')
+                        }}
+                    >
+                        Votes
+                    </div>
+                    <div
+                        className={"dao-menu-item " + (menuItem === 'agreement' ? 'item-active' : '')}
+                        onClick={() => {
+                            setMenuItem( 'agreement')
+                        }}
+                    >
+                        Agreement
+                    </div>
+                </div>
             </div>
             <div className="dao-page-main">
+              <div className="header">{name}</div>
+                {
+                    menuItem === 'details' && <div>
+                        <DAOMain addr={daoAddr} id={daoId}/>
+                    </div>
+                }
+
                 {
                     menuItem === 'members' && <DAOMembers members={members}/>
                 }
                 {
-                    menuItem === 'initiatives' && <div>
-                        <DAOInitiatives proposals={proposals}/>
-                        <CreateProposal
-                            daoAddr={daoAddr}
-                            user_avatar='https://robohash.org/25?set=set2&size=180x180'
-                            start={start}
-                            end={end}
-                        />
-                        <button onClick={onCreateProposal}>Create Proposal</button>
+                    menuItem === 'votes' && <div>
+                        <DAOVotes addr={daoAddr} id={daoId}/>
                     </div>
                 }
+
                 {
-                    menuItem === 'about' && <div>
-                        <DAOAbout
-                            description={description}
-                            administrators={members.slice(0, 1)}
-                        />
+                    menuItem === 'agreement' && <div>
+                        <DAOAgreement addr={daoAddr} id={daoId}/>
                     </div>
                 }
             </div>

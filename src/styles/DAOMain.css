@@ -1,0 +1,110 @@
+
+.dao-main {
+    width: 773px;
+}
+
+.sidebar {
+    margin-top: 20px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.sidebar .info {
+    padding: 20px;
+}
+
+.sidebar .info .author {
+    margin-top: 10px;
+    color: #333333;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.sidebar .info .author img {
+    margin-top: 3px;
+    width: 35px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+}
+.sidebar .info .author span {
+    margin-left: 10px;
+    font-weight: normal;
+}
+.sidebar .info .date {
+    margin-top: 10px;
+}
+.sidebar .info h1 {
+    color: #333333;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.sidebar .info{
+    background: #F7F7F7;
+    border-radius: 10px;
+}
+
+.sidebar .buttons div {
+    margin-top: 15px;
+    text-align: center;
+    background: #F7F7F7;
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.dao-main .short {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.dao-main .short img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+}
+
+.dao-main .short span {
+    margin-left: 10px;
+}
+
+
+.dao-main .short .status {
+    width: 95px;
+    padding: 5px 13px;
+    background: #BDBDBD;
+    color: #F7F7F7;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}
+
+.dao-main .short .executed {
+    background: #000000;
+}
+
+.dao-main .short .share {
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 8px;
+    cursor: pointer;
+}
+.dao-main .short .share * {
+    display: inline;
+}
+
+.dao-main .description {
+    margin-top: 10px;
+    text-align: justify;
+}
+
+.dao-main .date {
+    margin-top: 10px;
+}

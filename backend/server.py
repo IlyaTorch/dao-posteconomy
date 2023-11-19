@@ -62,7 +62,8 @@ default_users = [
         avatar_url="https://media.licdn.com/dms/image/C4D03AQHMYP1Bu_v9Zw/profile-displayphoto-shrink_400_400/0/1575466999948?e=2147483647&v=beta&t=6szBCGVXcgLXIAdWdZ_uAFf_Mfk0ok4YJWYzDxvu2_U",
     ),
 ]
-default_daos = []
+daos = []
+votes = []
 
 
 # class DAO(Document):
@@ -74,6 +75,16 @@ class DAO(BaseModel):
     members_count: int
     dao_avatar: str
     tags: list[str]
+
+
+# class UserVote(Document):
+class UserVote(BaseModel):
+    user_address: str
+    dao_addr: str
+    proposal_id: int
+    choice: bool
+    sum: int
+    timestamp: int
 
 
 async def init_db():
@@ -135,13 +146,13 @@ async def create_dao(request: Request):
         dao_avatar=IT_IMAGE_ADDR if dao['scope'] == 'it' else EDUCATION_IMAGE_ADDR,
         tags=tags
     )
-    default_daos.append(d)
+    daos.append(d)
     # await d.create()
 
 
 @app.get("/daos/{addr}")
 async def get_dao(addr: str):
-    dao = next(filter(lambda d: d.dao_addr == addr, default_daos))
+    dao = next(filter(lambda d: d.dao_addr == addr, daos))
     return dao.model_dump()
 
 
@@ -158,3 +169,19 @@ async def get_current_user() -> dict:
     user = await User.find_one(User.address == addr)
 
     return user.model_dump()
+
+
+@app.get("/votes/{user_addr}")
+async def list_votes(user_addr: str):
+    print(votes)
+    print(user_addr)
+    return list(filter(lambda u: u.user_address == user_addr, votes))
+
+
+@app.post("/votes")
+async def vote(request: Request):
+    data = await request.json()
+    uv = UserVote(**data)
+    votes.append(uv)
+
+    return uv.model_dump()

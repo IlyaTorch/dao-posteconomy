@@ -1,4 +1,4 @@
-.dao-page {
+.user-page {
     width: 80%;
     display: flex;
     margin-top: 20px;
@@ -8,7 +8,7 @@
     gap: 20px;
 }
 
-.dao-page-short-info {
+.user-page-short-info {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,44 +16,46 @@
     flex-grow: 1;
     gap: 20px;
 }
-.dao-page-main {
+
+.user-page-main {
     display: flex;
     flex-direction: column;
     flex-grow: 2;
     gap: 20px;
 }
-.li-member {
-    font-size: 10px;
-}
-.dao-page-initiatives-header {
-    font-size: 26px;
+
+.user-page-main .user-votes-header {
+    color: #4F4F4F;
+    font-size: 28px;
     font-weight: bold;
 }
 
-.dao-page-main .header {
-    color: #333333;
-    font-size: 36px;
-    font-weight: bold;
-}
-
-
-.dao-menu {
-    width: 235px;
-    text-align: left;
+.user-page-main .user-votes {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
     background-color: #F7F7F7;
 }
-.dao-menu-item {
-    margin-top: 8px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 25px;
-    font-size: 18px;
-    cursor: pointer;
+
+
+.user-page-main .user-vote-item .title {
+    font-weight: bold;
 }
-.item-active {
-    border-left: 2px solid #000000;
+
+.user-page-main .user-vote-item .header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-page-main .user-vote-item .header img {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+    margin-right: 10px;
 }

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {fetchDAO, getDAO, isMember, joinDAO} from "../PosteconomyV2";
 import {useGlobalState} from "../store";
 import "../styles/DAOitem.css";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 const DAOitem = ({id, addr}) => {
     const [acc] = useGlobalState('connectedAccount');
@@ -10,6 +10,8 @@ const DAOitem = ({id, addr}) => {
     const [daoTags, setDaoTags] = useState([])
     const [daoName, setDaoName] = useState('')
     const [daoAvatar, setDaoAvatar] = useState('')
+    const location = useLocation();
+    const is_dao_page = location.pathname.includes('dao')
 
     useEffect(() => {
         const loadData = async () => {
@@ -39,18 +41,14 @@ const DAOitem = ({id, addr}) => {
                     alt={addr}
                 />
             </Link>
-            <br/>
-            <span className="name">
-                {daoName}
-            </span>
+            {!is_dao_page && <span className="name">{daoName}</span>}
             <div className="tags">
                 {daoTags.map(tag => (
                     <><span className="tag">#{tag}&nbsp;</span><br/></>
                     ))}
             </div>
-            {daoMember ?
-                <button className='button-member'>Member</button> :
-                <button className='button-join' onClick={onJoinDAO}>Join</button>}
+            {daoMember && <button className='button-member'>Member</button>}
+            {is_dao_page && <button className='button-join' onClick={onJoinDAO}>Join</button>}
         </div>
     )
 };

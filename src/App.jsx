@@ -4,10 +4,10 @@ import { loadWeb3, createInitialData } from './PosteconomyV2'
 import { ToastContainer } from 'react-toastify'
 // import { isUserLoggedIn } from './CometChat'
 import Home from './views/Home'
-import Proposal from './views/Proposal'
 // import Chat from './views/Chat'
 import 'react-toastify/dist/ReactToastify.min.css'
 import DAO from "./views/DAO";
+import User from "./views/User";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false)
@@ -23,8 +23,8 @@ const App = () => {
       {loaded && (
         <Routes>
           <Route path="/" element={<Home/>} />
-          <Route path="dao/:addr/proposal/:id" element={<Proposal/>} />
           <Route path="dao/:addr" element={<DAO/>} />
+          <Route path="users/:addr" element={<User/>} />
           {/* <Route path="chat/:gid" element={<Chat />} /> */}
         </Routes>
       )}

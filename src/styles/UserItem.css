@@ -1,0 +1,26 @@
+.user-item {
+    width: 235px;
+    height: 460px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    text-align: center;
+    background-color: #F7F7F7;
+}
+
+.user-item img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+}
+
+.user-item .name {
+    font-size: 22px;
+    font-weight: bold;
+}

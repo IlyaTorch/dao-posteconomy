@@ -136,16 +136,25 @@ const getProposal = async (id) => {
 }
 
 
-const voteOnProposal = async (daoAddr, proposalId, amount, username, user_avatar) => {
+const voteOnProposal = async (daoAddr, proposalId, amount, username, user_addr) => {
     try {
         const contractDAO = new web3.eth.Contract(
             DAO.abi,
             daoAddr
         )
         const account = getGlobalState('connectedAccount')
-        return await contractDAO.methods
-            .vote(proposalId, amount > 0, username, user_avatar)
-            .send({from: account, value: amount})
+        // const res = await contractDAO.methods
+        //     .vote(proposalId, amount > 0, username, user_addr)
+        //     .send({from: account, value: amount})
+        await fetchCreateVote({
+            user_address: account,
+            dao_addr: daoAddr,
+            proposal_id: proposalId,
+            choice: amount > 0,
+            sum: amount,
+            timestamp: 0, // TODO js .currnet timestamp
+        })
+        return res
     } catch (error) {
         console.log('voteOnProposal', error)
         return error
@@ -259,10 +268,26 @@ const fetchCreateDao = async (dao) => {
 }
 
 
+const fetchCreateVote = async (vote) => {
+    const resp = await fetch(`${BACKEND_URL}/votes`, {
+        method: "POST",
+        body: JSON.stringify(vote)
+    })
+    return await resp.json()
+}
+
+
 const fetchUser = async (addr) => {
     const resp = await fetch(`${BACKEND_URL}/users/${addr}`)
     return await resp.json()
 }
+
+
+const fetchUserVotes = async (addr) => {
+    const resp = await fetch(`${BACKEND_URL}/votes/${addr}`)
+    return await resp.json()
+}
+
 
 
 const fetchDAO = async (addr) => {
@@ -287,4 +312,5 @@ export {
     getProposalDetails,
     fetchUser,
     fetchDAO,
+    fetchUserVotes,
 }
