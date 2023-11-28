@@ -48,7 +48,7 @@ const DAOitem = ({id, addr}) => {
                     ))}
             </div>
             {daoMember && <button className='button-member'>Member</button>}
-            {is_dao_page && <button className='button-join' onClick={onJoinDAO}>Join</button>}
+            {is_dao_page && !daoMember && <button className='button-join' onClick={onJoinDAO}>Join</button>}
         </div>
     )
 };

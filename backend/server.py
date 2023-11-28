@@ -53,7 +53,7 @@ default_users = [
         address="0x6620bcaCC17760eE0C81b1F440e8801EF8e65aEF",
         role="Teacher",
         username="Felix Lipov",
-        avatar_url="https://media.licdn.com/dms/image/D5603AQEkC3An_89J_g/profile-displayphoto-shrink_800_800/0/1685789629354?e=2147483647&v=beta&t=lTkyzfYZykdbQ0-MYaIzURyPosc7D9eEhnfwTFZru-0",
+        avatar_url="https://media.licdn.com/dms/image/C5103AQF_icln4XvZyQ/profile-displayphoto-shrink_200_200/0/1516357831118?e=2147483647&v=beta&t=tukFnqwwb_A00np0ilIwS0myW6EJzrnWsMaWkEYjLxg",
     ),
     User(
         address="0x68Bca109B3B6959cbc504B3cd07a81f11a9285Ec",
@@ -63,7 +63,7 @@ default_users = [
     ),
 ]
 daos = []
-votes = []
+votes = {}
 
 
 # class DAO(Document):
@@ -175,13 +175,13 @@ async def get_current_user() -> dict:
 async def list_votes(user_addr: str):
     print(votes)
     print(user_addr)
-    return list(filter(lambda u: u.user_address == user_addr, votes))
+    return list(filter(lambda u: u.user_address == user_addr, votes.values()))
 
 
 @app.post("/votes")
 async def vote(request: Request):
     data = await request.json()
     uv = UserVote(**data)
-    votes.append(uv)
+    votes[(uv.user_address, uv.dao_addr)] = uv
 
     return uv.model_dump()

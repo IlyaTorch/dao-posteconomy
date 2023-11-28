@@ -1,3 +1,5 @@
+run python backend server
+
 nvm use v12.7.0
 
 truffle migrate

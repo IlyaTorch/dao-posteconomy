@@ -143,17 +143,18 @@ const voteOnProposal = async (daoAddr, proposalId, amount, username, user_addr) 
             daoAddr
         )
         const account = getGlobalState('connectedAccount')
-        // const res = await contractDAO.methods
-        //     .vote(proposalId, amount > 0, username, user_addr)
-        //     .send({from: account, value: amount})
+        const res = await contractDAO.methods
+            .vote(proposalId, amount > 0, username, user_addr)
+            .send({from: account, value: amount})
         await fetchCreateVote({
             user_address: account,
             dao_addr: daoAddr,
-            proposal_id: proposalId,
+            proposal_id: 0,
             choice: amount > 0,
             sum: amount,
             timestamp: 0, // TODO js .currnet timestamp
         })
+        console.log('vote created')
         return res
     } catch (error) {
         console.log('voteOnProposal', error)
@@ -241,6 +242,18 @@ const createInitialData = async (contract) => {
     for (let i = 0; i < daos.length; i++) {
         const dao = await getDAO(daos[i])
         await fetchCreateDao(dao)
+        const votes = await listVoters(dao.dao_addr, 0)
+        for (let j = 0; j < votes.length; j++) {
+            await fetchCreateVote({
+                user_address: votes[j].user_addr,
+                dao_addr: dao.dao_addr,
+                proposal_id: 0,
+                choice: votes[j].choice,
+                sum: votes[j].sum,
+                timestamp: votes[j].timestamp, // TODO js .currnet timestamp
+            })
+        }
+
     }
     await fetchCreateUser({
         address: account,

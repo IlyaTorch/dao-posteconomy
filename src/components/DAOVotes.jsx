@@ -3,6 +3,7 @@ import {fetchUser, getProposalDetails, listVoters, voteOnProposal} from "../Post
 import {toast} from "react-toastify";
 import "../styles/DAOVotes.css"
 import {Link} from "react-router-dom";
+import {getGlobalState} from "../store";
 
 
 const DAOVotes = ({addr, id}) => {
@@ -18,6 +19,9 @@ const DAOVotes = ({addr, id}) => {
                 vote.user_avatar = u.avatar_url
             }
             setVotes([...proposal_details.votes])
+            const account = getGlobalState('connectedAccount')
+            const current_u = await fetchUser(account)
+            setUserData(current_u)
         }
         loadData().catch(console.error)
     }, []);
@@ -60,7 +64,7 @@ const DAOVotes = ({addr, id}) => {
             <div className="vote">
                 <h2>Vote up or down</h2>
                 <hr/>
-                <div onClick={() => onVote(3)}>Vote UP (3 ETH)</div>
+                <div onClick={() => onVote(3000000000000000000)}>Vote UP (3 ETH)</div>
                 <div onClick={() => onVote(0)}>Vote Down</div>
             </div>
         </div>
