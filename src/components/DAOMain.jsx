@@ -6,7 +6,17 @@ import {Link} from "react-router-dom";
 
 
 const DAOMain = ({addr, id}) => {
-    const default_data = {status: ""}
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const current_date = new Date();
+    const end_date = new Date();
+    end_date.setDate(current_date.getDate() + 7);
+
+
+    const default_data = {
+        status: "Active",
+        start: current_date.toLocaleDateString('en-US', options),
+        end: end_date.toLocaleDateString('en-US', options)
+    }
     const [data, setData] = useState(default_data)
     const [dao_title, setTitle] = useState(undefined)
     useEffect(() => {

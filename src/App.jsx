@@ -8,6 +8,7 @@ import Home from './views/Home'
 import 'react-toastify/dist/ReactToastify.min.css'
 import DAO from "./views/DAO";
 import User from "./views/User";
+import ProposalCreate from "./views/ProposalCreate";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false)
@@ -23,6 +24,7 @@ const App = () => {
       {loaded && (
         <Routes>
           <Route path="/" element={<Home/>} />
+          <Route path="dao/create" element={<ProposalCreate/>} />
           <Route path="dao/:addr" element={<DAO/>} />
           <Route path="users/:addr" element={<User/>} />
           {/* <Route path="chat/:gid" element={<Chat />} /> */}

@@ -22,12 +22,12 @@ const connectWallet = async () => {
 }
 
 
-const createDAO = async (name, description) => {
+const createDAO = async (name, description, scope) => {
     const contract = getGlobalState('contract')
     const account = getGlobalState('connectedAccount')
 
     try {
-        await contract.methods.createDAO(name, description).send({from: account});
+        return await contract.methods.createDAO(name, description, scope).send({from: account});
         location.reload();
     } catch (error) {
         console.log('createDAO', error);
@@ -211,15 +211,15 @@ const loadWeb3 = async () => {
 
             setGlobalState('contract', contract)
 
-            await createInitialData(contract)
+            // await createInitialData(contract)
 
             const dao_addresses = await contract.methods.getAllDAOs().call()
             setGlobalState('dao_addresses', dao_addresses)
             const daos = []
             for (let i = 0; i < dao_addresses.length; i++) {
                 const dao_details = await getDAO(dao_addresses[i])
-                const dao_additional_details = await fetchDAO(dao_addresses[i])
-                daos.push({...dao_details, ...dao_additional_details})
+                // const dao_additional_details = await fetchDAO(dao_addresses[i])
+                // daos.push({...dao_details, ...dao_additional_details})
             }
             setGlobalState('daos', daos)
             setGlobalState('filtered_daos', daos)
@@ -237,7 +237,7 @@ const loadWeb3 = async () => {
 
 const createInitialData = async (contract) => {
     const account = getGlobalState('connectedAccount')
-    // await contract.methods.addDefaultDAOs().send({from: account});
+    await contract.methods.addDefaultDAOs().send({from: account});
     const daos = await getAllDAOs()
     for (let i = 0; i < daos.length; i++) {
         const dao = await getDAO(daos[i])
@@ -325,5 +325,6 @@ export {
     getProposalDetails,
     fetchUser,
     fetchDAO,
+    fetchCreateDao,
     fetchUserVotes,
 }

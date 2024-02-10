@@ -4,7 +4,7 @@ import CreateProposal from '../components/CreateProposal'
 import Header from '../components/Header'
 import Proposals from '../components/Proposals'
 import DAOlist from "../components/DAOlist";
-import DAOcreate from "../components/DAOcreate";
+import ProposalCreateForm from "../components/ProposalCreateForm";
 import "../styles/Home.css";
 import SearchBar from "../components/SearchBar";
 
@@ -27,7 +27,7 @@ const Home = () => {
             <br/>
             <br/>
             <br/>
-            <DAOcreate/>
+            <ProposalCreateForm/>
         </>
     )
 }
