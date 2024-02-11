@@ -86,7 +86,7 @@ const getAllDAOs = async () => {
 };
 
 
-const createDAOproposal = async (contractAddr, title, description, beneficiaryAddr, start, end) => {
+const createProposal = async (contractAddr, title, description, beneficiaryAddr, start, end) => {
     try {
         const account = getGlobalState('connectedAccount');
         const contractDAO = new web3.eth.Contract(
@@ -211,15 +211,15 @@ const loadWeb3 = async () => {
 
             setGlobalState('contract', contract)
 
-            // await createInitialData(contract)
+            await createInitialData(contract)
 
             const dao_addresses = await contract.methods.getAllDAOs().call()
             setGlobalState('dao_addresses', dao_addresses)
             const daos = []
             for (let i = 0; i < dao_addresses.length; i++) {
                 const dao_details = await getDAO(dao_addresses[i])
-                // const dao_additional_details = await fetchDAO(dao_addresses[i])
-                // daos.push({...dao_details, ...dao_additional_details})
+                const dao_additional_details = await fetchDAO(dao_addresses[i])
+                daos.push({...dao_details, ...dao_additional_details})
             }
             setGlobalState('daos', daos)
             setGlobalState('filtered_daos', daos)
@@ -316,7 +316,7 @@ export {
     getAllDAOs,
     joinDAO,
     isMember,
-    createDAOproposal,
+    createProposal,
     getDAOproposals,
     getProposal,
     voteOnProposal,

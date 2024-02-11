@@ -9,7 +9,7 @@ import "../styles/DAO.css";
 const DAO = () => {
     const {addr} = useParams()
     const [daos] = useGlobalState('dao_addresses');
-    const id = daos.indexOf(addr)
+    const id = 0
 
     return (
         <>

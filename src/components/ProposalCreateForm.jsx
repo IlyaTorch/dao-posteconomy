@@ -1,6 +1,7 @@
 import {useState} from "react";
 import '../styles/ProposalCreateForm.css';
-import {createDAO, fetchCreateDao} from "../PosteconomyV2";
+import {createDAO, createProposal, fetchCreateDao} from "../PosteconomyV2";
+import {getGlobalState} from "../store";
 
 
 const ProposalCreateForm = () => {
@@ -17,8 +18,13 @@ const ProposalCreateForm = () => {
     };
 
     const onCreateProposal = async () => {
-        const res = await createDAO(form_data.title, form_data.description, form_data.tags.split(',')[0])
-        const dao_addr = res.events.DAOCreated.returnValues.dao
+        const dao = await createDAO(form_data.title, form_data.description, form_data.tags.split(',')[0])
+        const dao_addr = dao.events.DAOCreated.returnValues.dao
+        const current_date = new Date();
+        const end_date = new Date();
+        end_date.setDate(current_date.getDate() + 7);
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
         await fetchCreateDao({
             title: form_data.title,
             description: form_data.description,
@@ -27,6 +33,14 @@ const ProposalCreateForm = () => {
             members_count: 1,
             dao_addr: dao_addr,
         })
+        await createProposal(
+            dao_addr,
+            form_data.title,
+            form_data.description,
+            getGlobalState('connectedAccount'),
+            current_date.toLocaleDateString('en-US', options),
+            end_date.toLocaleDateString('en-US', options),
+        )
         location.replace(`/dao/${dao_addr}`);
 
     }

@@ -3,7 +3,7 @@ import { FaTimes } from 'react-icons/fa'
 import { raiseProposal } from '../Posteconomy'
 import { setGlobalState, useGlobalState } from '../store'
 import { toast } from 'react-toastify'
-import {createDAOproposal} from "../PosteconomyV2";
+import {createProposal} from "../PosteconomyV2";
 
 const CreateProposal = ({daoAddr, user_avatar, start, end}) => {
   const [createProposalModal] = useGlobalState('createProposalModal')
@@ -16,7 +16,7 @@ const CreateProposal = ({daoAddr, user_avatar, start, end}) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     // if (!title || !description || !beneficiary || !amount || !initiator) return
-    createDAOproposal(daoAddr, title, description, beneficiary, start, end).then(res => {
+    createProposal(daoAddr, title, description, beneficiary, start, end).then(res => {
       toast.success('Proposal created, reloading in progress...')
       closeModal()
       // window.location.reload()

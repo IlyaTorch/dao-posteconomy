@@ -18827,12 +18827,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xC7f13b71e4Ed94972B26514bd1D21a00830ed1B4",
-      "transactionHash": "0x4882099d7af2aaa87eb8f6742cee5cbeda9b25a0effbd1c2b69cf06422418354"
+      "address": "0xd8CaD48D626EAc2046e1A3e1df3b1eC97771bAf3",
+      "transactionHash": "0x942e1043a53657e06d1c8def0c400b034002ed0d8329193c1e0822ad80c3505b"
     }
   },
   "schemaVersion": "3.4.10",
-  "updatedAt": "2024-02-10T18:48:58.442Z",
+  "updatedAt": "2024-02-11T08:05:26.028Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
