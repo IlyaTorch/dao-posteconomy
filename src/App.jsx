@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.min.css'
 import DAO from "./views/DAO";
 import User from "./views/User";
 import ProposalCreate from "./views/ProposalCreate";
+import ProposalElections from "./views/ProposalElections";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false)
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="dao/create" element={<ProposalCreate/>} />
           <Route path="dao/:addr" element={<DAO/>} />
           <Route path="users/:addr" element={<User/>} />
+          <Route path="elections/:addr" element={<ProposalElections/>} />
           {/* <Route path="chat/:gid" element={<Chat />} /> */}
         </Routes>
       )}

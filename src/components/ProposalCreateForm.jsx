@@ -83,7 +83,7 @@ const ProposalCreateForm = () => {
                 onClick={onCreateProposal}
                 className="proposal-create-form-button"
             >
-                Create DAO
+                Initiate
             </button>
             <br/>
         </div>

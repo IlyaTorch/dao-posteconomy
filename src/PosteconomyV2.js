@@ -281,6 +281,16 @@ const fetchCreateDao = async (dao) => {
 }
 
 
+const fetchUpdateDao = async (dao_addr, data) => {
+    const resp = await fetch(`${BACKEND_URL}/daos/${dao_addr}`, {
+        method: "PATCH",
+        body: JSON.stringify(data)
+    })
+    return await resp.json()
+}
+
+
+
 const fetchCreateVote = async (vote) => {
     const resp = await fetch(`${BACKEND_URL}/votes`, {
         method: "POST",
@@ -326,5 +336,6 @@ export {
     fetchUser,
     fetchDAO,
     fetchCreateDao,
+    fetchUpdateDao,
     fetchUserVotes,
 }

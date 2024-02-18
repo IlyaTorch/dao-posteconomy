@@ -75,6 +75,7 @@ class DAO(BaseModel):
     members_count: int
     dao_avatar: str
     tags: list[str]
+    contract_code: str = ''
 
 
 # class UserVote(Document):
@@ -156,6 +157,14 @@ async def create_dao(request: Request):
 @app.get("/daos/{addr}")
 async def get_dao(addr: str):
     dao = next(filter(lambda d: d.dao_addr == addr, daos))
+    return dao.model_dump()
+
+
+@app.patch("/daos/{addr}")
+async def update_dao(request: Request, addr: str):
+    data = await request.json()
+    dao = next(filter(lambda d: d.dao_addr == addr, daos))
+    dao.contract_code = data['contract_code']
     return dao.model_dump()
 
 

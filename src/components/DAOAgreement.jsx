@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {getProposalDetails} from "../PosteconomyV2";
+import {fetchDAO, getProposalDetails} from "../PosteconomyV2";
 import ContractEditor from "./ContractEditor";
 import "../styles/DAOAgreement.css"
 
@@ -9,7 +9,8 @@ const DAOAgreement = ({addr, id}) => {
     useEffect(() => {
         const loadData = async () => {
             const details = await getProposalDetails(addr, parseInt(id))
-            setData({...details})
+            const {contract_code} = await fetchDAO(addr)
+            setData({...details, contract_code: contract_code})
         }
         loadData().catch(console.error)
     }, []);
@@ -17,7 +18,7 @@ const DAOAgreement = ({addr, id}) => {
 
     return (
         <div className="dao-agreement">
-            <ContractEditor title={data.title} description={data.description}/>
+            <ContractEditor dao_addr={addr} contract_code={data.contract_code}/>
         </div>
     )
 };

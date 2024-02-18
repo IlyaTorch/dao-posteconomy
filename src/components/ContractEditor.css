@@ -11,6 +11,23 @@
   border: 1px solid #ccc;
 }
 
+.ContractEditor textarea {
+    width: 700px;
+    height: 400px;
+}
+
+.button-save {
+    width: 150px;
+    background-color: #7380FF;
+    border: none;
+    border-radius: 30px;
+    color: #FFF;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
 
 .preview {
   padding: 1rem;
