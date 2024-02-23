@@ -44,7 +44,7 @@ const DAOitem = ({id, addr}) => {
             {!is_dao_page && <span className="name">{daoName}</span>}
             <div className="tags">
                 {daoTags.map(tag => (
-                    <><span className="tag">#{tag}&nbsp;</span><br/></>
+                    <><span key={tag} className="tag">#{tag}&nbsp;</span><br/></>
                     ))}
             </div>
             {daoMember && <button className='button-member'>Member</button>}

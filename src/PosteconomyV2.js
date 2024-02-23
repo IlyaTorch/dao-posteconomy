@@ -1,6 +1,7 @@
 import Web3 from 'web3'
 import {getGlobalState, setGlobalState} from './store'
 import ManagerDAOs from './abis/ManagerDAOs.json'
+import ManagerDefaultUsers from './abis/ManagerDefaultUsers.json'
 import DAO from './abis/DAO.json'
 import {proposalArrayToObj, proposalDetailToObj} from "./utils";
 
@@ -25,9 +26,19 @@ const connectWallet = async () => {
 const createDAO = async (name, description, scope) => {
     const contract = getGlobalState('contract')
     const account = getGlobalState('connectedAccount')
+    const current_date = new Date();
+    const end_date = new Date();
+    end_date.setDate(current_date.getDate() + 7);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
     try {
-        return await contract.methods.createDAO(name, description, scope).send({from: account});
+        return await contract.methods.createDAO(
+            name,
+            description,
+            scope,
+            current_date.toLocaleDateString('en-US', options),
+            end_date.toLocaleDateString('en-US', options)
+        ).send({from: account});
         location.reload();
     } catch (error) {
         console.log('createDAO', error);
@@ -77,9 +88,7 @@ const getAllDAOs = async () => {
     const contract = getGlobalState('contract')
 
     try {
-        const data = await contract.methods.getAllDAOs().call();
-        console.log(data)
-        return data
+        return await contract.methods.getAllDAOs().call();
     } catch (error) {
         console.log('getAllDAOs', error)
     }
@@ -96,6 +105,25 @@ const createProposal = async (contractAddr, title, description, beneficiaryAddr,
 
         await contractDAO.methods
             .createProposal(account, title, description, beneficiaryAddr, start, end, false)
+            .send({from: account})
+        location.reload();
+    } catch (error) {
+        console.log(error.message)
+        return error
+    }
+}
+
+
+const setProposalState = async (dao_addr, proposal_id, state) => {
+    try {
+        const account = getGlobalState('connectedAccount');
+        const contractDAO = new web3.eth.Contract(
+            DAO.abi,
+            dao_addr
+        )
+
+        await contractDAO.methods
+            .setProposalState(proposal_id, state)
             .send({from: account})
         location.reload();
     } catch (error) {
@@ -226,12 +254,33 @@ const loadWeb3 = async () => {
         } else {
             window.alert('ManagerDAOs contract not deployed to detected network.')
         }
+        const network_data_default_users = ManagerDefaultUsers.networks[networkId]
+        if (network_data_default_users) {
+            const contract = new web3.eth.Contract(
+                ManagerDefaultUsers.abi,
+                network_data_default_users.address
+            )
+
+            await addDefaultUsers(
+                contract,
+                getGlobalState('dao_addresses')[0],
+                getGlobalState('dao_addresses')[1],
+            )
+        } else {
+            window.alert('ManagerDefaultUsers contract not deployed to detected network.')
+        }
         return true
     } catch (error) {
         alert('Please connect your metamask wallet V2!')
         console.log(error)
         return false
     }
+}
+
+
+const addDefaultUsers = async (contract, rejected, work_in_progr) => {
+    const account = getGlobalState('connectedAccount')
+    await contract.methods.addDefaultUserAndVotes(rejected, work_in_progr).send({from: account})
 }
 
 
@@ -338,4 +387,6 @@ export {
     fetchCreateDao,
     fetchUpdateDao,
     fetchUserVotes,
+    setProposalState,
+    addDefaultUsers,
 }

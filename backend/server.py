@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 IT_IMAGE_ADDR = "https://st3.depositphotos.com/2572561/16360/i/450/depositphotos_163607278-stock-photo-over-the-shoulder-footage-of.jpg"
-EDUCATION_IMAGE_ADDR = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fphotos%2Feducation&psig=AOvVaw0FvggOGvvlZnqkUq2n75Wt&ust=1699386482359000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIDdzo6SsIIDFQAAAAAdAAAAABAJ"
+AI_IMAGE_ADDR = "https://i.ytimg.com/vi/VM55efbOkCM/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC9xUg_bCsKK-fvcdqse4hU1e3PmA"
 
 
 CURRENT_USER_ADDR = ''
@@ -137,7 +137,13 @@ async def create_dao(request: Request):
     dao = await request.json()
     tags = dao.get('tags') or [dao['scope'], ]
     scope = dao.get('scope') or tags[0]
-    dao_avatar = dao.get('dao_avatar') or IT_IMAGE_ADDR if scope == 'it' else EDUCATION_IMAGE_ADDR
+
+    if scope == 'it':
+        dao_avatar = IT_IMAGE_ADDR
+    elif scope == 'ai':
+        dao_avatar = AI_IMAGE_ADDR
+    else:
+        dao_avatar = dao.get('dao_avatar', '')
     if dao['title'].lower() == 'browser programming language':
         tags.extend(['browser', 'programming'])
     d = DAO(

@@ -21,7 +21,6 @@ const ProposalElections = () => {
                     daoAddr={addr}
                 />
             </div>
-
         </>
     )
 };

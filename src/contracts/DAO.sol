@@ -14,6 +14,7 @@ contract DAO {
         address payable beneficiary;
         string start;
         string end;
+        uint256 state;
     }
     struct VotedStruct {
         address voter;
@@ -36,12 +37,35 @@ contract DAO {
     mapping(address => uint256[]) private stakeholderVotes;
     mapping(uint256 => VotedStruct[]) private votedOn;
 
-    constructor(string memory _name, string memory _description, string memory _scope, address _initiator) {
+    constructor(
+        string memory _name,
+        string memory _description,
+        string memory _scope,
+        address _initiator,
+        string memory _start,
+        string memory _end
+    ) {
         name = _name;
         description = _description;
         scope = _scope;
         members.push(_initiator);
         membersCount++;
+
+        proposals[proposalCount] = Proposal(
+            proposalCount,
+            _initiator,
+            _name,
+            _description,
+            0,
+            0,
+            false,
+            0,
+            payable(_initiator),
+            _start,
+            _end,
+            0
+        );
+        proposalCount++;
     }
 
     function addMember(address _member) public {
@@ -69,7 +93,8 @@ contract DAO {
             0,
             payable(beneficiary),
             _start,
-            _end
+            _end,
+            0
         );
         proposalCount++;
     }
@@ -155,7 +180,7 @@ contract DAO {
     }
 
     function getProposalDetails(uint256 _proposalId)
-        public view returns (string memory, string memory, uint256, uint256, bool, uint256, address, string memory, string memory, VotedStruct[] memory) {
+        public view returns (string memory, string memory, uint256, uint256, bool, uint256, address, string memory, string memory, uint256, VotedStruct[] memory) {
         Proposal storage proposal = proposals[_proposalId];
         VotedStruct[] memory votes = votedOn[_proposalId];
         return (
@@ -168,9 +193,15 @@ contract DAO {
             proposal.initiator,
             proposal.start,
             proposal.end,
+            proposal.state,
             votes
         );
     }
+
+    function setProposalState(uint256 _proposalId, uint256 _state) public {
+        Proposal storage proposal = proposals[_proposalId];
+        proposal.state = _state;
+     }
 
 //    function executeProposal(uint256 _proposalId) public {
 //        Proposal storage proposal = proposals[_proposalId];
@@ -179,5 +210,5 @@ contract DAO {
 //
 //        proposal.executed = true;
 //        // execute proposal code here
-    // }
+//     }
 }

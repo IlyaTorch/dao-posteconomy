@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import {getGlobalState} from "../store";
 
 
-const DAOVotes = ({addr, id}) => {
+const DAOVotes = ({addr, id, read_only}) => {
     const [votes, setVotes] = useState([])
     const [user_data, setUserData] = useState({})
 
@@ -61,12 +61,14 @@ const DAOVotes = ({addr, id}) => {
                     </div>
                 ))
             }</div>
-            <div className="vote">
-                <h2>Vote up or down</h2>
-                <hr/>
-                <div onClick={() => onVote(3000000000000000000)}>Vote UP (3 ETH)</div>
-                <div onClick={() => onVote(0)}>Vote Down</div>
-            </div>
+            {!read_only &&
+                <div className="vote">
+                    <h2>Vote up or down</h2>
+                    <hr/>
+                    <div onClick={() => onVote(3000000000000000000)}>Vote UP (3 ETH)</div>
+                    <div onClick={() => onVote(0)}>Vote Down</div>
+                </div>
+            }
         </div>
     )
 };

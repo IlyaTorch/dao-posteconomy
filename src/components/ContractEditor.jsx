@@ -6,7 +6,6 @@ import {Openlaw} from "openlaw";
 import {fetchUpdateDao} from "../PosteconomyV2";
 
 function ContractEditor({dao_addr, contract_code}) {
-    console.log(contract_code)
     const [contract_state, setContractState] = useState(contract_code);
     const [html, setHtml] = useState('');
 

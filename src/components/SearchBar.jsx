@@ -42,6 +42,7 @@ function SearchBar() {
                     <button
                         className={`tag-button ${selectedTags.includes(tag) ? 'selected' : ''}`}
                         onClick={() => toggleTag(tag)}
+                        key={tag}
                     >
                         {tag}
                     </button>

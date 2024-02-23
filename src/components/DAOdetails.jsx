@@ -1,12 +1,12 @@
-import { fetchUser, getDAO, getDAOproposals } from "../PosteconomyV2";
+import {fetchUser, getDAO, getDAOproposals, setProposalState} from "../PosteconomyV2";
 import React, {useEffect, useState} from "react";
 import DAOitem from "../components/DAOitem";
 import "../styles/DAOdetails.css";
-import {setGlobalState} from "../store";
 import DAOMembers from "./DAOMembers";
 import DAOMain from "./DAOMain";
 import DAOVotes from "./DAOVotes";
 import DAOAgreement from "./DAOAgreement";
+import {ProposalStatus} from "../utils";
 
 
 const DAOdetails = ({daoId, daoAddr}) => {
@@ -15,10 +15,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
     const [members, setMembers] = useState([])
     const [proposals, setProposals] = useState([])
     const [menuItem, setMenuItem] = useState('details')
-    let d = new Date();
-    const start = d.toString();
-    d.setDate(d.getDate() + 2);
-    const end = d.toString()
+    const [proposal_status_int, setProposalStatusInt] = useState(0)
 
     useEffect(() => {
         const loadData = async () => {
@@ -32,14 +29,14 @@ const DAOdetails = ({daoId, daoAddr}) => {
             setDescription(dao_details.description)
             setMembers(members)
             setProposals(proposals)
+            setProposalStatusInt(proposals[0].status_int)
+            if (proposals[0].status_int === ProposalStatus.Voting && proposals[0].votesAgainst >= 5) {
+                await setProposalState(daoAddr, 0, ProposalStatus.Rejected)
+            }
         }
         loadData().catch(console.log)
     }, [daoAddr]);
 
-
-    const onCreateProposal = () => {
-        setGlobalState('createProposalModal', '')
-    }
 
     return (
         <div className="dao-page">
@@ -64,14 +61,17 @@ const DAOdetails = ({daoId, daoAddr}) => {
                     >
                         Votes
                     </div>
-                    <div
-                        className={"dao-menu-item " + (menuItem === 'agreement' ? 'item-active' : '')}
-                        onClick={() => {
-                            setMenuItem( 'agreement')
-                        }}
-                    >
-                        Agreement
-                    </div>
+                    {
+                        proposal_status_int > 1 &&
+                        <div
+                            className={"dao-menu-item " + (menuItem === 'agreement' ? 'item-active' : '')}
+                            onClick={() => {
+                                setMenuItem('agreement')
+                            }}
+                        >
+                            Agreement
+                        </div>
+                    }
                 </div>
             </div>
             <div className="dao-page-main">
@@ -87,7 +87,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
                 }
                 {
                     menuItem === 'votes' && <div>
-                        <DAOVotes addr={daoAddr} id={daoId}/>
+                        <DAOVotes addr={daoAddr} id={daoId} read_only={proposal_status_int > ProposalStatus.Voting}/>
                     </div>
                 }
 

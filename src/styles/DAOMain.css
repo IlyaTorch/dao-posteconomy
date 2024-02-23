@@ -78,7 +78,7 @@
 
 
 .dao-main .short .status {
-    width: 95px;
+    text-align: center;
     padding: 5px 13px;
     background: #BDBDBD;
     color: #F7F7F7;
