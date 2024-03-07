@@ -55,12 +55,12 @@ contract ManagerDAOs {
         daos[address(rejected)] = rejected;
         daoAddresses.push(address(rejected));
         DAO contract_in_progress = new DAO(
-            "Integrate GPT with dating apps",
-            "We're aiming to revolutionize the dating scene by integrating cutting-edge AI capabilities into our app. By incorporating OpenAI's GPT (Generative Pre-trained Transformer) technology, we envision a dynamic platform where users engage in more meaningful, enjoyable, and personalized interactions.",
-            "ai",
+            "Two-week tour for Olympiad students of the Belarusian State University",
+            "Visit to the Belarusian State University campus: The students could visit the campus and learn about the history, facilities, and academic programs offered by the university. Tour of Belarusian cultural sites.",
+            "education",
             0xCFDDe8452921D5C60E3Fda3A29f2Cb9437f509D6,
-            "2024-02-24",
-            "2024-03-03"
+            "2024-03-09",
+            "2024-03-23"
         );
         daos[address(contract_in_progress)] = contract_in_progress;
         daoAddresses.push(address(contract_in_progress));

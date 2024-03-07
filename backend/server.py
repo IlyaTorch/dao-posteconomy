@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 IT_IMAGE_ADDR = "https://st3.depositphotos.com/2572561/16360/i/450/depositphotos_163607278-stock-photo-over-the-shoulder-footage-of.jpg"
 AI_IMAGE_ADDR = "https://i.ytimg.com/vi/VM55efbOkCM/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC9xUg_bCsKK-fvcdqse4hU1e3PmA"
-
+EDUCATION_IMAGE_ADDR = "https://bsu.by/upload/Press/%D0%BE%D0%B1%D1%89%D0%B5%D0%B5%20%D1%84%D0%BE%D1%82%D0%BE.jpg"
 
 CURRENT_USER_ADDR = ''
 
@@ -142,6 +142,8 @@ async def create_dao(request: Request):
         dao_avatar = IT_IMAGE_ADDR
     elif scope == 'ai':
         dao_avatar = AI_IMAGE_ADDR
+    elif scope == 'education':
+        dao_avatar = EDUCATION_IMAGE_ADDR
     else:
         dao_avatar = dao.get('dao_avatar', '')
     if dao['title'].lower() == 'browser programming language':

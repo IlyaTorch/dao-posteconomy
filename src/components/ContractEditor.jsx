@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './ContractEditor.css';
-import {Openlaw} from "openlaw";
+import {APIClient, Openlaw} from "openlaw";
 import {fetchUpdateDao} from "../PosteconomyV2";
+import {setGlobalState} from "../store";
 
-function ContractEditor({dao_addr, contract_code}) {
+function ContractEditor({dao_addr, contract_code, read_only}) {
     const [contract_state, setContractState] = useState(contract_code);
     const [html, setHtml] = useState('');
 
@@ -19,7 +20,9 @@ function ContractEditor({dao_addr, contract_code}) {
     if (compiled_template.isError) {
         throw "my template error" + compiled_template.errorMessage;
     }
-    const execution_result = await Openlaw.execute(compiled_template.compiledTemplate, {}, {});
+    const params = {};
+
+    const execution_result = await Openlaw.execute(compiled_template.compiledTemplate, {}, params);
     const agreements = await Openlaw.getAgreements(execution_result.executionResult);
     setHtml(await Openlaw.renderForReview(agreements[0].agreement, {}))
   }, [contract_state]);
@@ -32,6 +35,7 @@ function ContractEditor({dao_addr, contract_code}) {
         onChange={(e) => setContractState(e.target.value)}
         value={contract_state}
         required
+        readOnly={read_only}
         />
         <br/>
         <br/>
@@ -39,7 +43,13 @@ function ContractEditor({dao_addr, contract_code}) {
         <br/>
         <button
             className="button-save"
-            onClick={async () => {await fetchUpdateDao(dao_addr, {contract_code: contract_state})}}
+            onClick={async () => {
+                await fetchUpdateDao(dao_addr, {contract_code: contract_state})
+                const apiClient = new APIClient('https://lib.openlaw.io/api/v1/default');
+                apiClient.login('itorch2001@gmail.com', 'itorch2001');
+                await apiClient.saveTemplate('initiative-dao', contract_state)
+            }}
+            disabled={read_only}
         >
             Save
         </button>

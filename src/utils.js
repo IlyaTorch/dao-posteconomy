@@ -7,7 +7,7 @@ const ProposalStatus = {
     Rejected:1,
     Work_On_Contract: 2,
     performers_selection: 3,
-    wip: 4,
+    WIP: 4,
     finished: 5
 }
 
