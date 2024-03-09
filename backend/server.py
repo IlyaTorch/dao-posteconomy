@@ -1,5 +1,6 @@
 import asyncio
 from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
 
 import motor.motor_asyncio
 
@@ -63,7 +64,21 @@ default_users = [
     ),
 ]
 daos = []
+tasks = {}
 votes = {}
+
+
+class Task(BaseModel):
+    task_id: int
+    dao_addr: str
+    title: str
+    description: str
+    task_status: int  # 0-to_do, 1-in progress, 2-done
+    created: datetime
+    due_date: datetime
+    cost: int = 0
+    comments: list[str] = []
+    executors: list[str] = []
 
 
 # class DAO(Document):
@@ -76,6 +91,7 @@ class DAO(BaseModel):
     dao_avatar: str
     tags: list[str]
     contract_code: str = ''
+    tasks: list[Task] = []
 
 
 # class UserVote(Document):
@@ -92,7 +108,7 @@ async def init_db():
     client = motor.motor_asyncio.AsyncIOMotorClient(
         "mongodb://dominion:dominion@0.0.0.0:27017/dominion"
     )
-    await init_beanie(database=client.db_name, document_models=[User, DAO])
+    await init_beanie(database=client.db_name, document_models=[User, DAO, Task])
     for u in default_users:
         await u.create()
 
@@ -205,3 +221,37 @@ async def vote(request: Request):
     votes[(uv.user_address, uv.dao_addr)] = uv
 
     return uv.model_dump()
+
+
+@app.get("/daos/{addr}/tasks")
+async def get_tasks(addr: str):
+    return {'tasks': list(tasks.get(addr, {}).values())}
+
+
+@app.post("/daos/{addr}/tasks")
+# async def add_task(addr: str, task: Task):
+async def add_task(addr: str):
+    task = Task(
+        task_id=1,
+        dao_addr=addr,
+        title='Create a telegram chat',
+        description='We need a telegram chat for communication',
+        task_status=0,  # 0-to_do, 1-in progress, 2-done
+        created=datetime.utcnow(),
+        due_date=(datetime.utcnow() + timedelta(days=1)),
+        cost=3,
+        comments=[],
+        executors=['ilya', 'alex', 'fing'],
+    )
+    if not tasks.get(addr): tasks[addr] = {}
+    tasks[addr][task.task_id] = task
+
+
+@app.get("/daos/{addr}/tasks/{id}")
+async def get_task(addr: str, task_id: int):
+    return tasks[addr][task_id]
+
+
+@app.put("/daos/{addr}/tasks/{id}")
+async def update(addr: str, task_id: int, task: Task):
+    tasks[addr][task_id] = task

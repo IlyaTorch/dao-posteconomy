@@ -10,6 +10,8 @@ import DAO from "./views/DAO";
 import User from "./views/User";
 import ProposalCreate from "./views/ProposalCreate";
 import ProposalElections from "./views/ProposalElections";
+import Dashboards from "./views/Dashboards";
+import Tasks from "./views/Tasks";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false)
@@ -29,6 +31,8 @@ const App = () => {
           <Route path="dao/:addr" element={<DAO/>} />
           <Route path="users/:addr" element={<User/>} />
           <Route path="elections/:addr" element={<ProposalElections/>} />
+          <Route path="dashboards/" element={<Dashboards/>} />
+          <Route path="dashboards/:addr" element={<Tasks/>} />
           {/* <Route path="chat/:gid" element={<Chat />} /> */}
         </Routes>
       )}

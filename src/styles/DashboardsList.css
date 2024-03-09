@@ -1,0 +1,31 @@
+.dashboards {
+    margin-top: 20px;
+    margin-left: 250px;
+}
+.dashboards-header {
+    color: #333333;
+    font-size: 36px;
+    font-weight: bold;
+}
+.dashboards-list {
+    width: 800px;
+}
+.dashboards-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 10px;
+    background: #F7F7F7;
+}
+.dashboards-item > div {
+    padding: 10px;
+}
+.dashboards-item img {
+    padding: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 45px;
+    width: 45px;
+    border-radius: 100%;
+    border: 0.5px solid #000;
+    display: inline;
+}

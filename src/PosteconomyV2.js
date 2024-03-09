@@ -367,6 +367,22 @@ const fetchDAO = async (addr) => {
     return await resp.json()
 }
 
+
+const fetchTasks = async (addr) => {
+    const resp = await fetch(`${BACKEND_URL}/daos/${addr}/tasks`)
+    return await resp.json()
+}
+
+
+const fetchCreateTask = async (addr) => {
+    const resp = await fetch(`${BACKEND_URL}/daos/${addr}/tasks`, {
+        method: "POST",
+        body: JSON.stringify({})
+    })
+    return await resp.json()
+}
+
+
 export {
     loadWeb3,
     connectWallet,
@@ -389,4 +405,6 @@ export {
     fetchUserVotes,
     setProposalState,
     addDefaultUsers,
+    fetchTasks,
+    fetchCreateTask,
 }

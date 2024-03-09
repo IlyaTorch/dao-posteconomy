@@ -11,6 +11,42 @@ const ProposalStatus = {
     finished: 5
 }
 
+
+const TaskStatus = {
+    todo: 0,
+    in_progress:1,
+    done: 2,
+}
+
+
+const calcStatus = (dao) => {
+    const statuses = []
+    for (let i=0; i < dao.tasks.length; i++) {
+        statuses.push(dao.tasks[i].status);
+    }
+    if (statuses.length === 0) {
+        return TaskStatus.todo
+    }
+    const unique = [...new Set(statuses)];
+    if (unique.length === 1) {
+        return unique[0]
+    }
+    return TaskStatus.in_progress
+}
+
+
+const taskStatusToString = (task_status) => {
+    if (task_status === TaskStatus.todo) {
+        return 'ToDo'
+    }
+    if (task_status === TaskStatus.in_progress) {
+        return 'In Progress'
+    }
+    if (task_status === TaskStatus.done) {
+        return 'Done'
+    }
+}
+
 function getStatusName(status) {
   const statusKeys = Object.keys(ProposalStatus);
   const statusValues = Object.values(ProposalStatus);
@@ -67,4 +103,7 @@ export {
     proposalArrayToObj,
     proposalDetailToObj,
     ProposalStatus,
+    TaskStatus,
+    calcStatus,
+    taskStatusToString,
 }
