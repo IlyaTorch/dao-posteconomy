@@ -374,10 +374,10 @@ const fetchTasks = async (addr) => {
 }
 
 
-const fetchCreateTask = async (addr) => {
+const fetchCreateTask = async (addr, data) => {
     const resp = await fetch(`${BACKEND_URL}/daos/${addr}/tasks`, {
         method: "POST",
-        body: JSON.stringify({})
+        body: JSON.stringify(data)
     })
     return await resp.json()
 }

@@ -7,6 +7,7 @@ import DAOMain from "./DAOMain";
 import DAOVotes from "./DAOVotes";
 import DAOAgreement from "./DAOAgreement";
 import {ProposalStatus} from "../utils";
+import {setGlobalState} from "../store";
 
 
 const DAOdetails = ({daoId, daoAddr}) => {
@@ -33,6 +34,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
             if (proposals[0].status_int === ProposalStatus.Voting && proposals[0].votesAgainst >= 5) {
                 await setProposalState(daoAddr, 0, ProposalStatus.Rejected)
             }
+            setGlobalState('dao_addr', daoAddr)
         }
         loadData().catch(console.log)
     }, [daoAddr]);

@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from "react";
 import "../styles/TasksList.css";
 import 'openlaw-elements/dist/openlaw-elements.min.css';
-import {calcStatus, taskStatusToString} from "../utils";
-import {getGlobalState} from "../store";
+import {taskStatusToString} from "../utils";
 import {Link} from "react-router-dom";
-import {fetchCreateTask, fetchDAO, fetchTasks, getProposalDetails} from "../PosteconomyV2";
+import {fetchTasks, fetchUser} from "../PosteconomyV2";
 import CreateTaskModal from "./CreateTaskModal";
 
 
@@ -12,10 +11,20 @@ const TasksList = ({dao_addr}) => {
     const [tasks, setTasks] = useState([])
     const [is_modal_active, setIsModalActive] = useState(false)
 
+    const loadTasks = async (dao_addr) => {
+        const resp = await fetchTasks(dao_addr)
+        const tasks = resp.tasks
+        for (let i = 0; i < tasks.length; i++) {
+            const user = await fetchUser(tasks[i].executors[0])
+            tasks[i].avatar_url = user.avatar_url
+        }
+        return tasks
+    }
+
     useEffect(() => {
         const loadData = async () => {
-            const resp = await fetchTasks(dao_addr)
-            setTasks(resp.tasks)
+            const tasks = await loadTasks(dao_addr)
+            setTasks(tasks)
         }
         loadData().catch(console.error)
     }, []);
@@ -26,8 +35,9 @@ const TasksList = ({dao_addr}) => {
 
     const onClose = async () => {
         setIsModalActive(false)
-        const resp = await fetchTasks(dao_addr)
-        setTasks(resp.tasks)
+        const tasks = await loadTasks(dao_addr)
+        setTasks(tasks)
+        setTasks(tasks)
     }
 
     return (
@@ -41,7 +51,7 @@ const TasksList = ({dao_addr}) => {
                             <span>{task.title}</span>
                             <span>{taskStatusToString(task.task_status)}</span>
                             <span>
-                                <img src={task.executors[0]}/>
+                                <img src={task.avatar_url}/>
                             </span>
                             <span>{task.comments.pop()}</span>
                         </Link>
@@ -49,7 +59,12 @@ const TasksList = ({dao_addr}) => {
                     </div>
                 )}
             </div>
-            <button onClick={onAddTask}>Add Task</button>
+            <button
+                className="tasks-add"
+                onClick={onAddTask}
+            >
+                Add Task
+            </button>
         </div>
     )
 };

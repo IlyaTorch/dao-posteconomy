@@ -20,6 +20,7 @@ const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   proposals: [],
   daoDetailsMenuItem: 'members',
   tags: DEFAULT_TAGS,
+  dao_addr: undefined,
 })
 
 const truncate = (text, startChars, endChars, maxLength) => {

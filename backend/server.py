@@ -66,6 +66,14 @@ default_users = [
 daos = []
 tasks = {}
 votes = {}
+TASK_ID = 0
+
+
+class TaskCreate(BaseModel):
+    dao_addr: str
+    title: str
+    description: str
+    executors: list[str] = []
 
 
 class Task(BaseModel):
@@ -229,19 +237,24 @@ async def get_tasks(addr: str):
 
 
 @app.post("/daos/{addr}/tasks")
-# async def add_task(addr: str, task: Task):
-async def add_task(addr: str):
+async def add_task(addr: str, request: Request):
+    data = await request.json()
+    data = TaskCreate.model_validate(data)
+
+    global TASK_ID
+    TASK_ID += 1
+
     task = Task(
-        task_id=1,
-        dao_addr=addr,
-        title='Create a telegram chat',
-        description='We need a telegram chat for communication',
+        task_id=TASK_ID,
+        dao_addr=data.dao_addr,
+        title=data.title,
+        description=data.description,
         task_status=0,  # 0-to_do, 1-in progress, 2-done
         created=datetime.utcnow(),
         due_date=(datetime.utcnow() + timedelta(days=1)),
-        cost=3,
+        cost=0,
         comments=[],
-        executors=['ilya', 'alex', 'fing'],
+        executors=data.executors,
     )
     if not tasks.get(addr): tasks[addr] = {}
     tasks[addr][task.task_id] = task
