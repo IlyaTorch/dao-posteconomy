@@ -383,6 +383,15 @@ const fetchCreateTask = async (addr, data) => {
 }
 
 
+const fetchUpdateTask = async (addr, data) => {
+    const resp = await fetch(`${BACKEND_URL}/daos/${addr}/tasks/${data.task_id}`, {
+        method: "PUT",
+        body: JSON.stringify(data)
+    })
+    return await resp.json()
+}
+
+
 export {
     loadWeb3,
     connectWallet,
@@ -407,4 +416,5 @@ export {
     addDefaultUsers,
     fetchTasks,
     fetchCreateTask,
+    fetchUpdateTask,
 }

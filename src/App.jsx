@@ -12,6 +12,7 @@ import ProposalCreate from "./views/ProposalCreate";
 import ProposalElections from "./views/ProposalElections";
 import Dashboards from "./views/Dashboards";
 import Tasks from "./views/Tasks";
+import TaskPage from "./views/TaskPage";
 
 const App = () => {
   const [loaded, setLoaded] = useState(false)
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="elections/:addr" element={<ProposalElections/>} />
           <Route path="dashboards/" element={<Dashboards/>} />
           <Route path="dashboards/:addr" element={<Tasks/>} />
+          <Route path="dashboards/:addr/tasks/:task_id" element={<TaskPage/>} />
           {/* <Route path="chat/:gid" element={<Chat />} /> */}
         </Routes>
       )}

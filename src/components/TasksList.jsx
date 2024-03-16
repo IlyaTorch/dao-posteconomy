@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import "../styles/TasksList.css";
 import 'openlaw-elements/dist/openlaw-elements.min.css';
-import {taskStatusToString} from "../utils";
+import {TaskStatus, taskStatusToString} from "../utils";
 import {Link} from "react-router-dom";
-import {fetchTasks, fetchUser} from "../PosteconomyV2";
+import {fetchTasks, fetchUpdateTask, fetchUser} from "../PosteconomyV2";
 import CreateTaskModal from "./CreateTaskModal";
 
 
@@ -30,7 +30,12 @@ const TasksList = ({dao_addr}) => {
     }, []);
 
     const onAddTask = async () => {
-        setIsModalActive(true)
+        setIsModalActive(!is_modal_active)
+    }
+
+    const onUpdateTask = async (task, value) => {
+        task.task_status = value
+        await fetchUpdateTask(dao_addr, task)
     }
 
     const onClose = async () => {
@@ -47,15 +52,36 @@ const TasksList = ({dao_addr}) => {
             <div className="tasks-list">
                 {tasks.map(task =>
                     <div className="tasks-item">
-                        <Link to={`/${task.dao_addr}/tasks/${task.task_id}`}>
+                        <Link to={`/dashboards/${task.dao_addr}/tasks/${task.task_id}`}>
                             <span>{task.title}</span>
-                            <span>{taskStatusToString(task.task_status)}</span>
-                            <span>
-                                <img src={task.avatar_url}/>
-                            </span>
-                            <span>{task.comments.pop()}</span>
                         </Link>
-                        <div></div>
+                        <Link to={`/users/${task.executors[0]}`}>
+                            <span><img src={task.avatar_url}/></span>
+                        </Link>
+                        <span>
+                            <select
+                                onChange={e => onUpdateTask(task, e.target.value)}
+                            >
+                                <option
+                                    value={TaskStatus.todo}
+                                    selected={TaskStatus.todo === task.task_status}
+                                >
+                                    {taskStatusToString(TaskStatus.todo)}
+                                </option>
+                                <option
+                                    value={TaskStatus.in_progress}
+                                    selected={TaskStatus.in_progress === task.task_status}
+                                >
+                                    {taskStatusToString(TaskStatus.in_progress)}
+                                </option>
+                                <option
+                                    value={TaskStatus.done}
+                                    selected={TaskStatus.done === task.task_status}
+                                >
+                                    {taskStatusToString(TaskStatus.done)}
+                                </option>
+                            </select>
+                        </span>
                     </div>
                 )}
             </div>

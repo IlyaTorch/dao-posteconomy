@@ -1,0 +1,70 @@
+.tasks-header-task {
+    color: #333333;
+    font-size: 36px;
+    font-weight: bold;
+    margin-left: 250px;
+    margin-top: 20px;
+}
+
+.task-main .task-header {
+    color: #333333;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.task-main {
+    width: 700px;
+    height: 459px;
+    margin-top: 50px;
+    margin-left: 250px;
+    background: #F7F7F7;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.task-main .task-short {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-main .task-short img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 0.5px solid #000;
+    display: inline;
+}
+
+.task-main .task-short span {
+    margin-left: 10px;
+}
+
+
+.task-main .task-short .status {
+    text-align: center;
+    padding: 5px 13px;
+    background: #BDBDBD;
+    color: #F7F7F7;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}
+
+.task-main .task-short .share {
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 8px;
+    cursor: pointer;
+}
+.task-main .task-short .share * {
+    display: inline;
+}
+
+.task-main .description {
+    margin-top: 10px;
+    text-align: justify;
+}
+
+.task-main .date {
+    margin-top: 10px;
+}

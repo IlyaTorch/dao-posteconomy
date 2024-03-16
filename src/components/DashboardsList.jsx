@@ -36,7 +36,7 @@ const DashboardsList = () => {
                             <img src={dao.dao_avatar} alt=""/>
                             <span>{dao.title}</span>
                         </Link>
-                        <div>{taskStatusToString(calcStatus(dao))}</div>
+                        <div><b>{taskStatusToString(calcStatus(dao))}</b></div>
                     </div>
                 )}
             </div>

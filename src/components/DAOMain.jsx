@@ -69,7 +69,6 @@ const DAOMain = ({addr, id}) => {
             <div className="date">
                 Voting End Date: {end}
             </div>
-
         </div>
     )
 };

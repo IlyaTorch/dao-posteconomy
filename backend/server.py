@@ -260,11 +260,26 @@ async def add_task(addr: str, request: Request):
     tasks[addr][task.task_id] = task
 
 
-@app.get("/daos/{addr}/tasks/{id}")
+@app.get("/daos/{addr}/tasks/{task_id}")
 async def get_task(addr: str, task_id: int):
     return tasks[addr][task_id]
 
 
-@app.put("/daos/{addr}/tasks/{id}")
-async def update(addr: str, task_id: int, task: Task):
-    tasks[addr][task_id] = task
+@app.put("/daos/{addr}/tasks/{task_id}")
+async def update(addr: str, task_id: int, request: Request):
+    data = await request.json()
+    created = datetime.fromisoformat(data['created'])
+
+    tasks[addr][task_id] = Task(
+        task_id=task_id,
+        dao_addr=addr,
+        title=data['title'],
+        description=data['description'],
+        task_status=data['task_status'],  # 0-to_do, 1-in progress, 2-done
+        created=created,
+        due_date=(created + timedelta(days=1)),
+        cost=0,
+        comments=data['comments'],
+        executors=data['executors'],
+    )
+    return tasks[addr][task_id]

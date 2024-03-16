@@ -13,8 +13,10 @@
 .dashboards-item {
     display: flex;
     justify-content: space-between;
+    padding: 10px;
     margin: 10px 0 10px;
     background: #F7F7F7;
+    border-radius: 20px;
 }
 .dashboards-item > div {
     padding: 10px;
