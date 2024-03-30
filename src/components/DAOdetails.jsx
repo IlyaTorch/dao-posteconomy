@@ -71,7 +71,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
                                 setMenuItem('agreement')
                             }}
                         >
-                            Agreement
+                            Service Contract
                         </div>
                     }
                 </div>

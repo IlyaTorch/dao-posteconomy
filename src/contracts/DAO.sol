@@ -203,6 +203,15 @@ contract DAO {
         proposal.state = _state;
      }
 
+    function closeProposal(address receiver) public payable {
+//        require(msg.sender == proposals[0].initiator);
+
+        payable(receiver).transfer(address(this).balance);
+
+        setProposalState(0, 5); // 5 means proposal is finished
+  }
+
+
 //    function executeProposal(uint256 _proposalId) public {
 //        Proposal storage proposal = proposals[_proposalId];
 //        require(!proposal.executed, "Proposal has already been executed");

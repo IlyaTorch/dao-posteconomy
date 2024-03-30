@@ -27,8 +27,9 @@ const DAOitem = ({id, addr}) => {
         loadData().catch(console.log)
     }, [addr]);
 
-    const onJoinDAO = () => {
+    const onJoinDAO = (event) => {
         joinDAO(addr, acc).then(r => console.log(r))
+        console.log(event)
     }
 
     return (
@@ -48,7 +49,16 @@ const DAOitem = ({id, addr}) => {
                     ))}
             </div>
             {daoMember && <button className='button-member'>Member</button>}
-            {is_dao_page && !daoMember && <button className='button-join' onClick={onJoinDAO}>Join</button>}
+            {is_dao_page && !daoMember &&
+                <button className='button-join' >
+                    <b>Join as</b> <select name="role" className="join-role" onChange={event => onJoinDAO(event)}>
+                      <option value="">--Choose role--</option>
+                      <option value="inversotr">Investor</option>
+                      <option value="service_provider">Service Provider</option>
+                      <option value="client">Client</option>
+                    </select>
+                </button>
+            }
         </div>
     )
 };

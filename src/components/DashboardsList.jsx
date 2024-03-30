@@ -4,7 +4,7 @@ import 'openlaw-elements/dist/openlaw-elements.min.css';
 import {calcStatus, ProposalStatus, taskStatusToString} from "../utils";
 import {getGlobalState, setGlobalState} from "../store";
 import {Link} from "react-router-dom";
-import {getDAOproposals} from "../PosteconomyV2";
+import {fetchTasks, getDAOproposals} from "../PosteconomyV2";
 
 
 const DashboardsList = () => {
@@ -16,8 +16,9 @@ const DashboardsList = () => {
             for (let i = 0; i < daos_list.length; i++) {
                 const daoAddr = daos_list[i].dao_addr
                 const proposals = await getDAOproposals(daoAddr)
+                const tasks_resp = await fetchTasks(daoAddr)
+                daos_list[i].tasks = tasks_resp.tasks || []
                 if (proposals[0].status_int === ProposalStatus.WIP) {
-                    console.log(i)
                     setDaos([...daos, daos_list[i]])
                 }
             }

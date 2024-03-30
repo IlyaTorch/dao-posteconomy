@@ -15,11 +15,11 @@ contract DefaultUsers {
         string memory felix = "Felix Lipov";
         string memory nastya = "Anastasiya Konoplina";
 
-        users.push(User(max, 0xD87Fea2184D952eEEf827A190Fba9D7F2F09A638));
-        users.push(User(tony, 0x012493BE86AC0107723b1e1A0aCc087A42236ccA));
-        users.push(User(alex, 0x3D30c9631Fce0B4ebF71CcFAaa2e93597949A448));
-        users.push(User(felix, 0x6620bcaCC17760eE0C81b1F440e8801EF8e65aEF));
-        users.push(User(nastya, 0x68Bca109B3B6959cbc504B3cd07a81f11a9285Ec));
+        users.push(User(max, 0xEb6D42757C77B1c0809E87e3C6Aa95ff0DD7dED8));
+        users.push(User(tony, 0x12455B362556fC60e29Dc841Cad9C6c6Db7de264));
+        users.push(User(alex, 0x00462eB5089A88c01210AF95d41971863b9Bc122));
+        users.push(User(felix, 0x11a6CFB065a8819329C6c0d9Eddc96a4558CEFE6));
+        users.push(User(nastya, 0x91362EE7F4aeeE3D3B20568E553028a5E20e7385));
     }
 
     function getUsers() public view returns (User[] memory) {

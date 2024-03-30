@@ -22,7 +22,7 @@ const TaskStatus = {
 const calcStatus = (dao) => {
     const statuses = []
     for (let i=0; i < dao.tasks.length; i++) {
-        statuses.push(dao.tasks[i].status);
+        statuses.push(dao.tasks[i].task_status);
     }
     if (statuses.length === 0) {
         return TaskStatus.todo

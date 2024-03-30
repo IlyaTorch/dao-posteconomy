@@ -114,6 +114,31 @@ const createProposal = async (contractAddr, title, description, beneficiaryAddr,
 }
 
 
+const completeProposal = async (contractAddr, receiverAddr) => {
+    try {
+        const account = getGlobalState('connectedAccount');
+        const price = Web3.utils.toWei('2', 'ether');
+        web3.eth.sendTransaction({
+          from: account,
+          to: receiverAddr,
+          value: price
+        });
+
+        // const contractDAO = new web3.eth.Contract(
+        //     DAO.abi,
+        //     contractAddr
+        // )
+        //
+        // await contractDAO.methods
+        //     .closeProposal(receiverAddr)
+        //     .send({from: account})
+    } catch (error) {
+        console.log(error.message)
+        return error
+    }
+}
+
+
 const setProposalState = async (dao_addr, proposal_id, state) => {
     try {
         const account = getGlobalState('connectedAccount');
@@ -269,6 +294,29 @@ const loadWeb3 = async () => {
         } else {
             window.alert('ManagerDefaultUsers contract not deployed to detected network.')
         }
+
+
+        // const network_data_initiative_contract = InitiativeContract.networks[networkId]
+        // if (network_data_initiative_contract) {
+        //     const contract = new web3.eth.Contract(
+        //         InitiativeContract.abi,
+        //         network_data_initiative_contract.address
+        //     )
+        //     const price = Web3.utils.toWei('2', 'ether');
+        //     // await contract.methods.recordContract(accounts[0], "0x0F47B68e42601B33f89e9E5d156DfC9193e7ae40").send({from: accounts[0], value: price})
+        //     // web3.eth.sendTransaction({
+        //     //   from: accounts[0],
+        //     //   to: contract._address,
+        //     //   value: price
+        //     // });
+        //     console.log('contract ballance', await contract.methods.balance().call())
+        //     await contract.methods.confirmReceipt().send({from: accounts[0]})
+        //
+        //
+        // } else {
+        //     window.alert('InitiativeContract contract not deployed to detected network.')
+        // }
+
         return true
     } catch (error) {
         alert('Please connect your metamask wallet V2!')
@@ -417,4 +465,5 @@ export {
     fetchTasks,
     fetchCreateTask,
     fetchUpdateTask,
+    completeProposal,
 }
