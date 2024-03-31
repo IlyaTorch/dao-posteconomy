@@ -203,6 +203,11 @@ contract DAO {
         proposal.state = _state;
      }
 
+    function supportDao() public payable {
+        proposals[0].amount += msg.value;
+  }
+
+
     function closeProposal(address receiver) public payable {
 //        require(msg.sender == proposals[0].initiator);
 

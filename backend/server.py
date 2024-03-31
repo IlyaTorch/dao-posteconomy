@@ -29,15 +29,15 @@ class User(BaseModel):
 default_users = [
     User(
         address="0xEb6D42757C77B1c0809E87e3C6Aa95ff0DD7dED8",
-        role="investor",
-        username="Ludmila Serova",
-        avatar_url="https://media.licdn.com/dms/image/C4E03AQEYFPL_5nebqg/profile-displayphoto-shrink_800_800/0/1613595138717?e=2147483647&v=beta&t=qknqDZMuEpaOSkLcbo0OaC0ICtD0eXMJ1Y20RO2yLXc",
+        role="service_provider",
+        username="Maxim Zamir",
+        avatar_url="https://media.licdn.com/dms/image/C5603AQFSMOPo-heJDg/profile-displayphoto-shrink_800_800/0/1517521781866?e=2147483647&v=beta&t=DV2UZpuekl64kMvnV4gBv1juAbvYwdErlqd0bpMIftM",
     ),
     User(
         address="0x12455B362556fC60e29Dc841Cad9C6c6Db7de264",
         role="service_provider",
-        username="Maxim Zamir",
-        avatar_url="https://media.licdn.com/dms/image/C5603AQFSMOPo-heJDg/profile-displayphoto-shrink_800_800/0/1517521781866?e=2147483647&v=beta&t=DV2UZpuekl64kMvnV4gBv1juAbvYwdErlqd0bpMIftM",
+        username="Anton Cheplukov",
+        avatar_url="https://media.licdn.com/dms/image/C4D03AQHrkn1QkH8ZKg/profile-displayphoto-shrink_800_800/0/1592583398829?e=2147483647&v=beta&t=jMq1kmSdzBeIuYDwVneZU0nwmQR0rPS7AKsmRg_AK_o",
     ),
     User(
         address="0x00462eB5089A88c01210AF95d41971863b9Bc122",
@@ -45,14 +45,9 @@ default_users = [
         username="Aliaksandr Askerka",
         avatar_url="https://media.licdn.com/dms/image/D4D03AQHcVZsK6OwyqQ/profile-displayphoto-shrink_200_200/0/1694110627294?e=2147483647&v=beta&t=A8NdoGRLUVtIW1B5sesukPwhIw7kaY_PZ8Fw9msMqts",
     ),
+
     User(
         address="0x11a6CFB065a8819329C6c0d9Eddc96a4558CEFE6",
-        role="service_provider",
-        username="Anton Cheplukov",
-        avatar_url="https://media.licdn.com/dms/image/C4D03AQHrkn1QkH8ZKg/profile-displayphoto-shrink_800_800/0/1592583398829?e=2147483647&v=beta&t=jMq1kmSdzBeIuYDwVneZU0nwmQR0rPS7AKsmRg_AK_o",
-    ),
-    User(
-        address="0x91362EE7F4aeeE3D3B20568E553028a5E20e7385",
         role="client",
         username="Felix Lipov",
         avatar_url="https://media.licdn.com/dms/image/C5103AQF_icln4XvZyQ/profile-displayphoto-shrink_200_200/0/1516357831118?e=2147483647&v=beta&t=tukFnqwwb_A00np0ilIwS0myW6EJzrnWsMaWkEYjLxg",
@@ -62,6 +57,12 @@ default_users = [
         role="client",
         username="Anastasiya Konoplina",
         avatar_url="https://media.licdn.com/dms/image/C4D03AQHMYP1Bu_v9Zw/profile-displayphoto-shrink_400_400/0/1575466999948?e=2147483647&v=beta&t=6szBCGVXcgLXIAdWdZ_uAFf_Mfk0ok4YJWYzDxvu2_U",
+    ),
+    User(
+        address="0xCFDDe8452921D5C60E3Fda3A29f2Cb9437f509D6",
+        role="investor",
+        username="Ludmila Serova",
+        avatar_url="https://media.licdn.com/dms/image/C4E03AQEYFPL_5nebqg/profile-displayphoto-shrink_800_800/0/1613595138717?e=2147483647&v=beta&t=qknqDZMuEpaOSkLcbo0OaC0ICtD0eXMJ1Y20RO2yLXc",
     ),
 ]
 daos = []
@@ -101,6 +102,7 @@ class DAO(BaseModel):
     tags: list[str]
     contract_code: str = ''
     tasks: list[Task] = []
+    users: dict[str, str] = {}
     budget: int = 0
 
 
@@ -203,6 +205,14 @@ async def update_dao(request: Request, addr: str):
     return dao.model_dump()
 
 
+@app.post("/join/{addr}")
+async def update_dao(request: Request, addr: str):
+    data = await request.json()
+    dao = next(filter(lambda d: d.dao_addr == addr, daos))
+    dao.users[data['user_addr']] = data['role']
+    return dao.model_dump()
+
+
 @app.get("/users/{addr}")
 async def get_user(addr: str):
     # user = await User.find_one(User.address == addr)
@@ -210,7 +220,7 @@ async def get_user(addr: str):
     if not user:
         return User(
             address=addr,
-            role="executor",
+            role="client",
             username="",
             avatar_url="https://as2.ftcdn.net/v2/jpg/00/39/44/15/1000_F_39441531_3eyM9zCOnOjxAKYgko10ghMn86OxAXi3.jpg",
         ).model_dump()
@@ -227,8 +237,6 @@ async def get_current_user() -> dict:
 
 @app.get("/votes/{user_addr}")
 async def list_votes(user_addr: str):
-    print(votes)
-    print(user_addr)
     return list(filter(lambda u: u.user_address == user_addr, votes.values()))
 
 

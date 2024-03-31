@@ -3,7 +3,7 @@ import {getGlobalState, setGlobalState} from './store'
 import ManagerDAOs from './abis/ManagerDAOs.json'
 import ManagerDefaultUsers from './abis/ManagerDefaultUsers.json'
 import DAO from './abis/DAO.json'
-import {proposalArrayToObj, proposalDetailToObj} from "./utils";
+import {proposalArrayToObj, proposalDetailToObj, Role} from "./utils";
 
 
 const {ethereum} = window
@@ -55,6 +55,15 @@ const joinDAO = async (daoAddr, account) => {
         console.log('joinDAO', error)
     }
 };
+
+
+const fetchJoinDao = async (dao_addr, user_addr, role) => {
+    const resp = await fetch(`${BACKEND_URL}/join/${dao_addr}`, {
+        method: "POST",
+        body: JSON.stringify({user_addr: user_addr, role: role})
+    })
+    return await resp.json()
+}
 
 const isMember = async (daoAddr, member) => {
     const contract = getGlobalState('contract')
@@ -264,7 +273,7 @@ const loadWeb3 = async () => {
 
             setGlobalState('contract', contract)
 
-            await createInitialData(contract)
+            await createInitialData(contract, networkData)
 
             const dao_addresses = await contract.methods.getAllDAOs().call()
             setGlobalState('dao_addresses', dao_addresses)
@@ -332,7 +341,7 @@ const addDefaultUsers = async (contract, rejected, work_in_progr) => {
 }
 
 
-const createInitialData = async (contract) => {
+const createInitialData = async (contract, network_data) => {
     const account = getGlobalState('connectedAccount')
     await contract.methods.addDefaultDAOs().send({from: account});
     const daos = await getAllDAOs()
@@ -350,8 +359,17 @@ const createInitialData = async (contract) => {
                 timestamp: votes[j].timestamp, // TODO js .currnet timestamp
             })
         }
-
     }
+
+    // send eth to the tour for Olympiad students contract
+    const contractDAO = new web3.eth.Contract(
+        DAO.abi,
+        daos[daos.length -1]
+    )
+    // await contractDAO.methods.supportDao().send({from: account, value: Web3.utils.toWei('20', 'ether')})
+    //
+
+
     await fetchCreateUser({
         address: account,
         role: DEFAULT_ROLE,
@@ -466,4 +484,5 @@ export {
     fetchCreateTask,
     fetchUpdateTask,
     completeProposal,
+    fetchJoinDao,
 }

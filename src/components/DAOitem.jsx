@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {fetchDAO, getDAO, isMember, joinDAO} from "../PosteconomyV2";
+import {fetchDAO, fetchJoinDao, getDAO, isMember, joinDAO} from "../PosteconomyV2";
 import {useGlobalState} from "../store";
 import "../styles/DAOitem.css";
 import {Link, useLocation} from "react-router-dom";
@@ -10,6 +10,7 @@ const DAOitem = ({id, addr}) => {
     const [daoTags, setDaoTags] = useState([])
     const [daoName, setDaoName] = useState('')
     const [daoAvatar, setDaoAvatar] = useState('')
+    const [role, setRole] = useState('')
     const location = useLocation();
     const is_dao_page = location.pathname.includes('dao')
 
@@ -27,9 +28,9 @@ const DAOitem = ({id, addr}) => {
         loadData().catch(console.log)
     }, [addr]);
 
-    const onJoinDAO = (event) => {
-        joinDAO(addr, acc).then(r => console.log(r))
-        console.log(event)
+    const onJoinDAO = async () => {
+        await fetchJoinDao(addr, acc, role)
+        await joinDAO(addr, acc).then(r => console.log(r))
     }
 
     return (
@@ -50,8 +51,13 @@ const DAOitem = ({id, addr}) => {
             </div>
             {daoMember && <button className='button-member'>Member</button>}
             {is_dao_page && !daoMember &&
-                <button className='button-join' >
-                    <b>Join as</b> <select name="role" className="join-role" onChange={event => onJoinDAO(event)}>
+                <button className='button-join' onClick={() => onJoinDAO()}>
+                    <b>Join as</b> <select
+                        name="role"
+                        className="join-role"
+                        onClick={event => {event.stopPropagation()}}
+                        onChange={event => setRole(event.target.value)}
+                    >
                       <option value="">--Choose role--</option>
                       <option value="inversotr">Investor</option>
                       <option value="service_provider">Service Provider</option>

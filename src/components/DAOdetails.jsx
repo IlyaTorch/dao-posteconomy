@@ -1,4 +1,4 @@
-import {fetchUser, getDAO, getDAOproposals, setProposalState} from "../PosteconomyV2";
+import {fetchDAO, fetchUser, getDAO, getDAOproposals, setProposalState} from "../PosteconomyV2";
 import React, {useEffect, useState} from "react";
 import DAOitem from "../components/DAOitem";
 import "../styles/DAOdetails.css";
@@ -6,7 +6,7 @@ import DAOMembers from "./DAOMembers";
 import DAOMain from "./DAOMain";
 import DAOVotes from "./DAOVotes";
 import DAOAgreement from "./DAOAgreement";
-import {ProposalStatus} from "../utils";
+import {calcRole, ProposalStatus, Role} from "../utils";
 import {setGlobalState} from "../store";
 
 
@@ -21,10 +21,13 @@ const DAOdetails = ({daoId, daoAddr}) => {
     useEffect(() => {
         const loadData = async () => {
             const dao_details = await getDAO(daoAddr)
+            const dao_other_details = await fetchDAO(daoAddr)
             const proposals = await getDAOproposals(daoAddr)
             const members = []
             for (let i = 0; i < dao_details.members_list.length; i++) {
-                members.push(await fetchUser(dao_details.members_list[i]))
+                const user = await fetchUser(dao_details.members_list[i])
+                user.role = calcRole({...dao_details, ...dao_other_details}, user.address)
+                members.push(user)
             }
             setName(dao_details.title)
             setDescription(dao_details.description)

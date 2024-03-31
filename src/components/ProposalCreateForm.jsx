@@ -9,7 +9,8 @@ const ProposalCreateForm = () => {
         title: '',
         description: '',
         poster_url: '',
-        tags: ''
+        tags: '',
+        budget: undefined,
     });
 
     const handleChange = (e) => {
@@ -32,6 +33,7 @@ const ProposalCreateForm = () => {
             tags: form_data.tags.split(','),
             members_count: 1,
             dao_addr: dao_addr,
+            budget: form_data.budget,
         })
         await createProposal(
             dao_addr,
@@ -79,6 +81,15 @@ const ProposalCreateForm = () => {
                 onChange={handleChange}
                 placeholder="Separate tags with commas"
             />
+            <input
+                type="number"
+                placeholder="Enter the proposal budget"
+                onChange={handleChange}
+                name="budget"
+                value={form_data.budget}
+                required
+            />
+
             <button
                 onClick={onCreateProposal}
                 className="proposal-create-form-button"

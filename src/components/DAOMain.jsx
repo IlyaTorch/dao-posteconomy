@@ -3,6 +3,7 @@ import {fetchDAO, fetchUser, getDAO, getProposalDetails} from "../PosteconomyV2"
 import {getGlobalState} from "../store";
 import "../styles/DAOMain.css";
 import {Link} from "react-router-dom";
+import DAO from "../abis/DAO.json";
 
 
 const DAOMain = ({addr, id}) => {
@@ -19,8 +20,11 @@ const DAOMain = ({addr, id}) => {
     }
     const [data, setData] = useState(default_data)
     const [dao_title, setTitle] = useState(undefined)
+    const [balance, setBalance] = useState(0)
     useEffect(() => {
         const loadData = async () => {
+            const contract_balance = await web3.eth.getBalance(addr)
+            setBalance(await web3.utils.fromWei(contract_balance, 'ether'))
             const proposal_details = await getProposalDetails(addr, parseInt(id))
             const author = await fetchUser(proposal_details.author_addr)
             proposal_details.author_name = author.username
@@ -36,11 +40,11 @@ const DAOMain = ({addr, id}) => {
             const user = await fetchUser(user_addr)
 
             setTitle(dao_details.title)
-            setData({...data, ...proposal_details, dao_avatar: dao_additional_details.dao_avatar})
+            setData({...data, ...proposal_details, ...dao_additional_details})
         }
         loadData().catch(console.error)
     }, []);
-    const {title, status, description, start, end, author_avatar, author_name, author_addr} = data
+    const {title, status, description, start, end, author_avatar, author_name, author_addr, budget} = data
 
     return (
         <div className="dao-main">
@@ -62,6 +66,7 @@ const DAOMain = ({addr, id}) => {
                     Share
                 </div>
             </div>
+            <div className="budget">Initiative budget is <b>{balance}/{budget} ETH</b>.</div>
             <div className="description">{description}</div>
             <div className="date">
                 Voting Start Date: {start}

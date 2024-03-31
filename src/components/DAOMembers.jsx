@@ -19,6 +19,7 @@ const DAOMembers = ({members}) => {
                             <img src={member.avatar_url}/>
                         </div>
                         <div className="dao-member-name">{member.username}</div>
+                        <div className="dao-member-role"><b>{member.role}</b></div>
                         <div className="dao-member-address">{`${member.address.substring(0,15)}...`}</div>
                     </div>
                 </Link>

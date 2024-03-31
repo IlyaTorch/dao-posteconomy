@@ -1,5 +1,6 @@
 import Web3 from "web3";
 import {fetchUser} from "./PosteconomyV2";
+import user from "./views/User";
 
 
 const ProposalStatus = {
@@ -18,6 +19,26 @@ const TaskStatus = {
     done: 2,
 }
 
+const Role = {
+    investor: 'Investor',
+    service_provider: 'Service Provider',
+    client: 'Client',
+    initiator: 'Initiator',
+}
+
+
+const calcRole = (dao_details, user_addr) => {
+    if (user_addr === dao_details.members_list[0]) { // initiator
+        return Role.initiator
+    }
+    if (dao_details.users && dao_details.users[user_addr]) {
+        return Role[dao_details.users[user_addr]]
+    }
+    if (dao_details.title === 'Browser programming language') {
+        return Role.service_provider
+    }
+    return Role.client
+}
 
 const calcStatus = (dao) => {
     const statuses = []
@@ -104,6 +125,8 @@ export {
     proposalDetailToObj,
     ProposalStatus,
     TaskStatus,
+    Role,
     calcStatus,
+    calcRole,
     taskStatusToString,
 }
