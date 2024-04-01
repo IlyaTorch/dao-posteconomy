@@ -170,15 +170,6 @@ contract DAO {
         return votedOn[proposalId];
     }
 
-    function isMember(address _member) public view returns (bool) {
-        for (uint256 i = 0; i < membersCount; i++) {
-            if (members[i] == _member) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     function getProposalDetails(uint256 _proposalId)
         public view returns (string memory, string memory, uint256, uint256, bool, uint256, address, string memory, string memory, uint256, VotedStruct[] memory) {
         Proposal storage proposal = proposals[_proposalId];
@@ -205,24 +196,11 @@ contract DAO {
 
     function supportDao() public payable {
         proposals[0].amount += msg.value;
-  }
+    }
 
-
-    function closeProposal(address receiver) public payable {
+    function receiveReward(address payable _receiver) public payable {
 //        require(msg.sender == proposals[0].initiator);
-
-        payable(receiver).transfer(address(this).balance);
-
-        setProposalState(0, 5); // 5 means proposal is finished
-  }
-
-
-//    function executeProposal(uint256 _proposalId) public {
-//        Proposal storage proposal = proposals[_proposalId];
-//        require(!proposal.executed, "Proposal has already been executed");
-//        require(proposal.votesFor >= quorum, "Proposal does not have enough support");
-//
-//        proposal.executed = true;
-//        // execute proposal code here
-//     }
+        _receiver.call{value: msg.value}("");
+        msg.sender.call{value: msg.value}("");
+    }
 }

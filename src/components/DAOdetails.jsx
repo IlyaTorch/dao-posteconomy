@@ -27,6 +27,7 @@ const DAOdetails = ({daoId, daoAddr}) => {
             for (let i = 0; i < dao_details.members_list.length; i++) {
                 const user = await fetchUser(dao_details.members_list[i])
                 user.role = calcRole({...dao_details, ...dao_other_details}, user.address)
+                console.log(user.role)
                 members.push(user)
             }
             setName(dao_details.title)

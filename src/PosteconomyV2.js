@@ -123,24 +123,24 @@ const createProposal = async (contractAddr, title, description, beneficiaryAddr,
 }
 
 
-const completeProposal = async (contractAddr, receiverAddr) => {
+const receiveReward = async (contractAddr, receiverAddr, amount) => {
     try {
         const account = getGlobalState('connectedAccount');
-        const price = Web3.utils.toWei('2', 'ether');
-        web3.eth.sendTransaction({
-          from: account,
-          to: receiverAddr,
-          value: price
-        });
+        // web3.eth.sendTransaction({
+        //   from: account,
+        //   to: receiverAddr,
+        //   value: price
+        // });
 
-        // const contractDAO = new web3.eth.Contract(
-        //     DAO.abi,
-        //     contractAddr
-        // )
-        //
-        // await contractDAO.methods
-        //     .closeProposal(receiverAddr)
-        //     .send({from: account})
+        const contractDAO = new web3.eth.Contract(
+            DAO.abi,
+            contractAddr
+        )
+        // const amount = Web3.utils.toWei('2', 'ether');
+
+        await contractDAO.methods
+            .receiveReward(receiverAddr)
+            .send({from: account, value: amount})
     } catch (error) {
         console.log(error.message)
         return error
@@ -458,6 +458,13 @@ const fetchUpdateTask = async (addr, data) => {
 }
 
 
+const supportDao = async (dao_addr, amount) => {
+    const account = getGlobalState('connectedAccount')
+    const contractDAO = new web3.eth.Contract(DAO.abi, dao_addr)
+    await contractDAO.methods.supportDao().send({from: account, value: Web3.utils.toWei(amount, 'ether')})
+}
+
+
 export {
     loadWeb3,
     connectWallet,
@@ -483,6 +490,7 @@ export {
     fetchTasks,
     fetchCreateTask,
     fetchUpdateTask,
-    completeProposal,
+    receiveReward,
     fetchJoinDao,
+    supportDao,
 }

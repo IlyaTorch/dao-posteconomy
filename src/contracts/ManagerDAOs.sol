@@ -48,7 +48,7 @@ contract ManagerDAOs {
             "Browser programming language",
             "It is necessary to create a complete tool for creating web applications that will allow developers to manage the browser and its interface. This programming language must provide the ability to interact with a web server, create animations, games, maps and other web services. As a result of development, users will be able to use this language to create unique and functional web applications.",
             "it",
-            0xCFDDe8452921D5C60E3Fda3A29f2Cb9437f509D6,
+            0x65f13BBFd0c98fc01B8a7A17bf619eC2CFeb7D9a,
             "2024-02-18",
             "2024-02-25"
         );
@@ -58,7 +58,7 @@ contract ManagerDAOs {
             "Two-week tour for Olympiad students of the Belarusian State University",
             "Visit to the Belarusian State University campus: The students could visit the campus and learn about the history, facilities, and academic programs offered by the university. Tour of Belarusian cultural sites.",
             "education",
-            0xCFDDe8452921D5C60E3Fda3A29f2Cb9437f509D6,
+            0x65f13BBFd0c98fc01B8a7A17bf619eC2CFeb7D9a,
             "2024-03-09",
             "2024-03-23"
         );

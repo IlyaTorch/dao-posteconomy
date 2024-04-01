@@ -1,9 +1,10 @@
 import {useState, useEffect} from "react";
-import {fetchDAO, fetchUser, getDAO, getProposalDetails} from "../PosteconomyV2";
+import {fetchDAO, fetchUser, getDAO, getProposalDetails, supportDao} from "../PosteconomyV2";
 import {getGlobalState} from "../store";
 import "../styles/DAOMain.css";
 import {Link} from "react-router-dom";
 import DAO from "../abis/DAO.json";
+import {calcRole, Role} from "../utils";
 
 
 const DAOMain = ({addr, id}) => {
@@ -19,8 +20,13 @@ const DAOMain = ({addr, id}) => {
         end: end_date.toLocaleDateString('en-US', options)
     }
     const [data, setData] = useState(default_data)
+    const [current_user_role, setCurrentUserRole] = useState('')
+    const [support, setSupport] = useState(1)
     const [dao_title, setTitle] = useState(undefined)
     const [balance, setBalance] = useState(0)
+    const onSupportDaoClick = async () => {
+        await supportDao(addr, support)
+    }
     useEffect(() => {
         const loadData = async () => {
             const contract_balance = await web3.eth.getBalance(addr)
@@ -36,8 +42,9 @@ const DAOMain = ({addr, id}) => {
             }
             const dao_details = await getDAO(addr)
             const dao_additional_details = await fetchDAO(addr)
+            const dao = {...dao_details, ...dao_additional_details}
             const user_addr = getGlobalState("connectedAccount")
-            const user = await fetchUser(user_addr)
+            setCurrentUserRole(calcRole(dao, user_addr))
 
             setTitle(dao_details.title)
             setData({...data, ...proposal_details, ...dao_additional_details})
@@ -67,6 +74,19 @@ const DAOMain = ({addr, id}) => {
                 </div>
             </div>
             <div className="budget">Initiative budget is <b>{balance}/{budget} ETH</b>.</div>
+            {current_user_role !== Role.service_provider &&
+
+                <div className="support">
+                    Support with <input
+                                    className="support-input"
+                                    type="number"
+                                    min="1"
+                                    value={support}
+                                    onChange={(event) => setSupport(event.target.value)}
+                                />
+                    &nbsp;<button className="support-button" onClick={onSupportDaoClick}>Support ({support} ETH)</button>
+                </div>
+            }
             <div className="description">{description}</div>
             <div className="date">
                 Voting Start Date: {start}

@@ -27,6 +27,47 @@ const Role = {
 }
 
 
+const calcRewards = async (dao) => {
+    const contract_balance = await web3.eth.getBalance(dao.dao_addr)
+    const weights = {
+        'initiator': 30,
+        'investors': 50,
+        'services_providers': 20,
+    }
+    const rewards = {}
+    const investors = []
+    const services_providers = []
+
+    const users = Object.keys(dao.users)
+    for (let i = 0; i < users.length; i++) {
+        const u = users[i]
+        const role = calcRole(dao, u)
+        if (role === Role.investor) investors.push(u)
+        if (role === Role.service_provider) services_providers.push(u)
+    }
+
+    for (let i = 0; i < users.length; i++) {
+        const u = users[i]
+        const role = calcRole(dao, u)
+        if (role === Role.initiator) {
+            console.log('initiator Reward is', contract_balance * (weights['initiator'] / 100))
+            rewards[Role.initiator] = contract_balance * (weights['initiator'] / 100)
+        }
+        else if (role === Role.investor) {
+            console.log('investor Reward is', (contract_balance * (weights['investors'] / 100)) / investors.length)
+            rewards[Role.investor] = (contract_balance * (weights['investors'] / 100)) / investors.length
+        }
+        else if (role === Role.service_provider) {
+            console.log('service_provider Reward is', (contract_balance * (weights['services_providers'] / 100)) / services_providers.length)
+            rewards[Role.service_provider] = (contract_balance * (weights['services_providers'] / 100)) / services_providers.length
+        }
+    }
+
+    return rewards
+}
+
+
+
 const calcRole = (dao_details, user_addr) => {
     if (user_addr === dao_details.members_list[0]) { // initiator
         return Role.initiator
@@ -128,5 +169,6 @@ export {
     Role,
     calcStatus,
     calcRole,
+    calcRewards,
     taskStatusToString,
 }

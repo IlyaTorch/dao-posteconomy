@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import "../styles/TasksList.css";
 import 'openlaw-elements/dist/openlaw-elements.min.css';
-import {calcStatus, TaskStatus, taskStatusToString} from "../utils";
+import {calcRewards, calcRole, calcStatus, Role, TaskStatus, taskStatusToString} from "../utils";
 import {Link} from "react-router-dom";
-import {completeProposal, fetchTasks, fetchUpdateTask, fetchUser, getDAO} from "../PosteconomyV2";
+import {receiveReward, fetchDAO, fetchTasks, fetchUpdateTask, fetchUser, getDAO} from "../PosteconomyV2";
 import CreateTaskModal from "./CreateTaskModal";
 
 
@@ -39,7 +39,18 @@ const TasksList = ({dao_addr}) => {
     }
 
     const onCompleteInitiative = async () => {
-        await completeProposal(dao_addr, "0xfE336C66Dc0D1a724a75bCA58dF6d04F442D46C1")
+        const dao_data = await getDAO(dao_addr)
+        const dao_details = await fetchDAO(dao_addr)
+        const dao = {...dao_data, ...dao_details}
+        const rewards = await calcRewards(dao)
+
+        const users = Object.keys(dao.users)
+        for (let i = 0; i < users.length; i++) {
+            const u = users[i]
+            const role = calcRole(dao, u)
+            console.log(u, role, rewards[role])
+            await receiveReward(dao_addr, u, rewards[role])
+        }
     }
 
 

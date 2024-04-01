@@ -14,8 +14,8 @@ IT_IMAGE_ADDR = "https://st3.depositphotos.com/2572561/16360/i/450/depositphotos
 AI_IMAGE_ADDR = "https://i.ytimg.com/vi/VM55efbOkCM/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC9xUg_bCsKK-fvcdqse4hU1e3PmA"
 EDUCATION_IMAGE_ADDR = "https://bsu.by/upload/Press/%D0%BE%D0%B1%D1%89%D0%B5%D0%B5%20%D1%84%D0%BE%D1%82%D0%BE.jpg"
 
-CURRENT_USER_ADDR = '0xB95335263eebcd68b41e33c917D465655C9CfbF9'
-
+CURRENT_USER_ADDR = '0x26259e5c29498691ad20ebc2a9512A0D69CA0AAb'
+MILA = "0x65f13BBFd0c98fc01B8a7A17bf619eC2CFeb7D9a"
 # ROLES: investor, service_provider, client
 
 # class User(Document):
@@ -59,7 +59,7 @@ default_users = [
         avatar_url="https://media.licdn.com/dms/image/C4D03AQHMYP1Bu_v9Zw/profile-displayphoto-shrink_400_400/0/1575466999948?e=2147483647&v=beta&t=6szBCGVXcgLXIAdWdZ_uAFf_Mfk0ok4YJWYzDxvu2_U",
     ),
     User(
-        address="0xCFDDe8452921D5C60E3Fda3A29f2Cb9437f509D6",
+        address=MILA,
         role="investor",
         username="Ludmila Serova",
         avatar_url="https://media.licdn.com/dms/image/C4E03AQEYFPL_5nebqg/profile-displayphoto-shrink_800_800/0/1613595138717?e=2147483647&v=beta&t=qknqDZMuEpaOSkLcbo0OaC0ICtD0eXMJ1Y20RO2yLXc",
@@ -102,7 +102,7 @@ class DAO(BaseModel):
     tags: list[str]
     contract_code: str = ''
     tasks: list[Task] = []
-    users: dict[str, str] = {}
+    users: dict[str, str] = {MILA: 'initiator'}
     budget: int = 0
 
 

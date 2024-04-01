@@ -105,6 +105,21 @@
     text-align: justify;
 }
 
+.dao-main .support-input {
+    width: 55px;
+    border-radius: 12px;
+    padding: 5px;
+}
+
+.dao-main .support-button {
+    background-color: #7380FF;
+    color: #F7F7F7;
+    height: 40px;
+    padding: 5px 13px;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}
+
 .dao-main .date {
     margin-top: 10px;
 }

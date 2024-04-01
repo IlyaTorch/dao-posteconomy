@@ -59,7 +59,7 @@ const DAOitem = ({id, addr}) => {
                         onChange={event => setRole(event.target.value)}
                     >
                       <option value="">--Choose role--</option>
-                      <option value="inversotr">Investor</option>
+                      <option value="investor">Investor</option>
                       <option value="service_provider">Service Provider</option>
                       <option value="client">Client</option>
                     </select>
