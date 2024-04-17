@@ -15,17 +15,18 @@ AI_IMAGE_ADDR = "https://i.ytimg.com/vi/VM55efbOkCM/hq720.jpg?sqp=-oaymwEcCNAFEJ
 EDUCATION_IMAGE_ADDR = "https://bsu.by/upload/Press/%D0%BE%D0%B1%D1%89%D0%B5%D0%B5%20%D1%84%D0%BE%D1%82%D0%BE.jpg"
 
 CURRENT_USER_ADDR = '0x26259e5c29498691ad20ebc2a9512A0D69CA0AAb'
-MILA = "0x65f13BBFd0c98fc01B8a7A17bf619eC2CFeb7D9a"
+MILA = "0xE7D28259F759A5D910BE6a36b3523810076da0B7"
 # ROLES: investor, service_provider, client
 
-# class User(Document):
-class User(BaseModel):
+
+class User(Document):
     address: str
     role: str
     username: str
     avatar_url: str
 
 
+# DEV only
 default_users = [
     User(
         address="0xEb6D42757C77B1c0809E87e3C6Aa95ff0DD7dED8",
@@ -45,7 +46,6 @@ default_users = [
         username="Aliaksandr Askerka",
         avatar_url="https://media.licdn.com/dms/image/D4D03AQHcVZsK6OwyqQ/profile-displayphoto-shrink_200_200/0/1694110627294?e=2147483647&v=beta&t=A8NdoGRLUVtIW1B5sesukPwhIw7kaY_PZ8Fw9msMqts",
     ),
-
     User(
         address="0x11a6CFB065a8819329C6c0d9Eddc96a4558CEFE6",
         role="client",
@@ -78,7 +78,7 @@ class TaskCreate(BaseModel):
     executors: list[str] = []
 
 
-class Task(BaseModel):
+class Task(Document):
     task_id: int
     dao_addr: str
     title: str
@@ -91,8 +91,7 @@ class Task(BaseModel):
     executors: list[str] = []
 
 
-# class DAO(Document):
-class DAO(BaseModel):
+class DAO(Document):
     title: str
     dao_addr: str
     description: str
@@ -106,8 +105,7 @@ class DAO(BaseModel):
     budget: int = 0
 
 
-# class UserVote(Document):
-class UserVote(BaseModel):
+class UserVote(Document):
     user_address: str
     dao_addr: str
     proposal_id: int
@@ -127,7 +125,7 @@ async def init_db():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # await init_db()
+    await init_db()
     yield
 
 
@@ -150,14 +148,10 @@ app.add_middleware(
 async def create_user(request: Request) -> dict:
     data = await request.json()
     u = User(address=data['address'], role=data['role'], username=data['username'], avatar_url=data['avatar_url'])
-    # await u.create()
+    await u.create()
 
-    default_users.append(u)
-    global CURRENT_USER_ADDR
-    CURRENT_USER_ADDR = u.address
 
-    return {"message": "Users successfully created", "total": len(default_users)}
-    # return {"message": "Users successfully created", "total": await User.count()}
+    return {"message": "Users successfully created", "total": await User.count()}
 
 
 @app.post("/create/dao")
@@ -186,9 +180,7 @@ async def create_dao(request: Request):
         tags=tags,
         budget=dao.get('budget') or 50,
     )
-    daos.append(d)
-    print(d)
-    # await d.create()
+    await d.create()
 
 
 @app.get("/daos/{addr}")
@@ -200,23 +192,20 @@ async def get_dao(addr: str):
 @app.patch("/daos/{addr}")
 async def update_dao(request: Request, addr: str):
     data = await request.json()
-    dao = next(filter(lambda d: d.dao_addr == addr, daos))
-    dao.contract_code = data['contract_code']
+    dao = await DAO.find_one(addr=addr).update(data)
     return dao.model_dump()
 
 
 @app.post("/join/{addr}")
 async def update_dao(request: Request, addr: str):
     data = await request.json()
-    dao = next(filter(lambda d: d.dao_addr == addr, daos))
-    dao.users[data['user_addr']] = data['role']
+    dao = await DAO.find_one(addr=addr).update(data)
     return dao.model_dump()
 
 
 @app.get("/users/{addr}")
 async def get_user(addr: str):
-    # user = await User.find_one(User.address == addr)
-    user = next(filter(lambda u: u.address == addr, default_users), None)
+    user = await User.find_one(User.address == addr)
     if not user:
         return User(
             address=addr,
@@ -237,21 +226,20 @@ async def get_current_user() -> dict:
 
 @app.get("/votes/{user_addr}")
 async def list_votes(user_addr: str):
-    return list(filter(lambda u: u.user_address == user_addr, votes.values()))
+    return list(filter(lambda u: u.user_address == user_addr, await UserVote.all()))
 
 
 @app.post("/votes")
 async def vote(request: Request):
     data = await request.json()
     uv = UserVote(**data)
-    votes[(uv.user_address, uv.dao_addr)] = uv
-
+    await uv.save()
     return uv.model_dump()
 
 
 @app.get("/daos/{addr}/tasks")
 async def get_tasks(addr: str):
-    return {'tasks': list(tasks.get(addr, {}).values())}
+    return {'tasks': list(await Task.all())}
 
 
 @app.post("/daos/{addr}/tasks")
@@ -274,13 +262,12 @@ async def add_task(addr: str, request: Request):
         comments=[],
         executors=data.executors,
     )
-    if not tasks.get(addr): tasks[addr] = {}
-    tasks[addr][task.task_id] = task
+    await task.save()
 
 
 @app.get("/daos/{addr}/tasks/{task_id}")
 async def get_task(addr: str, task_id: int):
-    return tasks[addr][task_id]
+    return await Task.find_one(addr=addr, task_id=task_id)
 
 
 @app.put("/daos/{addr}/tasks/{task_id}")
@@ -288,7 +275,7 @@ async def update(addr: str, task_id: int, request: Request):
     data = await request.json()
     created = datetime.fromisoformat(data['created'])
 
-    tasks[addr][task_id] = Task(
+    tasks[addr][task_id] = await Task(
         task_id=task_id,
         dao_addr=addr,
         title=data['title'],
@@ -299,5 +286,5 @@ async def update(addr: str, task_id: int, request: Request):
         cost=0,
         comments=data['comments'],
         executors=data['executors'],
-    )
+    ).update()
     return tasks[addr][task_id]

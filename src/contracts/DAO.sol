@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-contract DAO {
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract DAO is ReentrancyGuard, AccessControl {
     struct Proposal {
         uint256 id;
         address initiator;
