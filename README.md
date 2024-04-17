@@ -1,16 +1,26 @@
-run python backend server
+# Start backend server
+```bash
+cd backend
+python uvicorn.py
+```
 
+# Install nvm v12.7.0
+```bash
 nvm use v12.7.0
+```
 
-replace initiator value with another user from ganache
-uncomment supportDao and comment after init phase
-
+# Deploy stamrt contracts to blockchain
+```bash
 truffle migrate
+```
 
+# Set Up Open Law env variables
+```bash
+export OPENLAW_EMAIL=your-email@gmail.com 
+export OPENLAW_PASSWORD=your-password 
+```
+
+# Start client app
+```bash
 yarn start
-
-Set up
-OPENLAW_EMAIL=your-email@gmail.com 
-OPENLAW_PASSWORD=your-password 
-
-yarn start
+```
