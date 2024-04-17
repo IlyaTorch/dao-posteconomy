@@ -9,4 +9,8 @@ truffle migrate
 
 yarn start
 
-# OPENLAW_EMAIL=your-email@gmail.com OPENLAW_PASSWORD=your-password yarn start
+Set up
+OPENLAW_EMAIL=your-email@gmail.com 
+OPENLAW_PASSWORD=your-password 
+
+yarn start
